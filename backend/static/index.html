@@ -1,0 +1,4539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SKETCHSPACE AI — From Imagination to Architecture</title>
+  
+  <!-- Architectural Atelier Typography: Cormorant Garamond, Instrument Serif, Manrope, IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  
+  <!-- Three.js for 3D Dollhouse & Spatial Walkthrough -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       RESTORED LUXURY ARCHITECTURAL ATELIER DESIGN SYSTEM
+       Palette: Deep Warm Charcoal, Antique Gold/Brass, Champagne, Warm Ivory,
+                Rich Walnut, Honed Bronze, Muted Olive, Travertine, Sandstone
+       ========================================================================== */
+    :root {
+      /* Deep Warm Charcoal Foundation */
+      --atelier-bg: #11100e;
+      --atelier-surface-1: #181613;
+      --atelier-surface-2: #211e1a;
+      --atelier-surface-elevated: #2a2622;
+      --atelier-card: rgba(28, 25, 21, 0.9);
+
+      /* Natural Stone & Warm Ivory Surfaces */
+      --warm-ivory: #fbf9f5;
+      --soft-cream: #f4f0e6;
+      --travertine: #dfd7c7;
+      --sandstone: #eae3d2;
+      --natural-taupe: #b5a895;
+      --muted-ash: #9e9382;
+      --dim-charcoal: #6b6357;
+
+      /* Restored Antique Gold, Brass & Bronze Accents */
+      --antique-brass: #c5a880;
+      --brass-hover: #d8bc94;
+      --brass-glow: rgba(197, 168, 128, 0.35);
+      --brass-subtle: rgba(197, 168, 128, 0.18);
+      --champagne-gold: #e5cfb0;
+      --walnut-rich: #3c2f2f;
+      --honed-bronze: #8c7853;
+      --olive-sage: #606b5d;
+      --forest-deep: #1e2b22;
+      --amber-warm: #d99a4e;
+
+      /* Structural Borders & Shadows */
+      --border-subtle: rgba(223, 215, 199, 0.12);
+      --border-medium: rgba(223, 215, 199, 0.22);
+      --border-brass: rgba(197, 168, 128, 0.55);
+      --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.35);
+      --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.45);
+      --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.65);
+
+      /* Typography Stack */
+      --font-serif-display: 'Cormorant Garamond', 'Instrument Serif', 'Playfair Display', Georgia, serif;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-tech: 'IBM Plex Mono', monospace;
+
+      /* Radii */
+      --radius-2xl: 20px;
+      --radius-xl: 14px;
+      --radius-lg: 10px;
+      --radius-md: 6px;
+      --radius-sm: 4px;
+      --radius-pill: 9999px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--atelier-bg);
+    }
+
+    body {
+      background-color: var(--atelier-bg);
+      color: var(--soft-cream);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection {
+      background: var(--brass-subtle);
+      color: var(--warm-ivory);
+    }
+
+    /* Ambient Warm Golden & Amber Architectural Lighting Fields */
+    .atelier-light-fields {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .light-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.16;
+      will-change: transform;
+    }
+    .glow-gold {
+      top: -15%; left: 10%;
+      width: 65vw; height: 60vh;
+      background: radial-gradient(circle, #c5a880 0%, #3c2f2f 60%, transparent 80%);
+      animation: floatWarmLight 30s infinite alternate ease-in-out;
+    }
+    .glow-bronze {
+      bottom: -15%; right: 5%;
+      width: 60vw; height: 65vh;
+      background: radial-gradient(circle, #8c7853 0%, #1e1714 65%, transparent 80%);
+      animation: floatWarmLight 36s infinite alternate ease-in-out;
+      animation-delay: -12s;
+    }
+
+    @keyframes floatWarmLight {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(3vw, 4vh) scale(1.08); }
+      100% { transform: translate(-2vw, -3vh) scale(0.95); }
+    }
+
+    /* Architectural Subtle Grid Overlay */
+    .atelier-grid-texture {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.12;
+      background-image: 
+        linear-gradient(to right, rgba(223, 215, 199, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(223, 215, 199, 0.08) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    /* Mouse-Reactive Golden Dust Particles Canvas (Part 2) */
+    #ambient-particles-canvas {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ==========================================================================
+       MINIMAL PREMIUM NAVIGATION
+       ========================================================================== */
+    .atelier-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(17, 16, 14, 0.92);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .brand-cube-badge {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--antique-brass), #3c2f2f);
+      border: 1px solid var(--brass-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--warm-ivory);
+      box-shadow: 0 4px 14px rgba(197, 168, 128, 0.25);
+    }
+    .brand-title-text {
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--warm-ivory);
+    }
+    .brand-atelier-tag {
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--antique-brass);
+      margin-left: 6px;
+    }
+
+    /* 3 Distinct Destinations: Overview, Creative Studio, My Designs */
+    .nav-destinations-bar {
+      display: flex;
+      align-items: center;
+      background: rgba(28, 25, 21, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      padding: 4px;
+      gap: 4px;
+    }
+    .nav-destination-btn {
+      background: transparent;
+      border: none;
+      color: var(--natural-taupe);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 8px 24px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-destination-btn:hover {
+      color: var(--warm-ivory);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .nav-destination-btn.active {
+      background: var(--antique-brass);
+      color: var(--atelier-bg);
+      font-weight: 700;
+      box-shadow: 0 2px 12px rgba(197, 168, 128, 0.35);
+    }
+
+    .nav-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-nav-pres {
+      background: var(--brass-subtle);
+      border: 1px solid var(--antique-brass);
+      color: var(--warm-ivory);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-nav-pres:hover {
+      background: var(--antique-brass);
+      color: var(--atelier-bg);
+    }
+
+    /* Main View Wrapper */
+    main {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      width: 100%;
+    }
+
+    .app-destination-view {
+      display: none;
+      width: 100%;
+      min-height: calc(100vh - 72px);
+    }
+    .app-destination-view.active-destination {
+      display: block;
+      animation: fadeInView 0.35s ease forwards;
+    }
+    @keyframes fadeInView {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================================
+       VIEW 1: OVERVIEW HOMEPAGE
+       ========================================================================== */
+    .overview-hero-container {
+      min-height: 88vh;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      align-items: center;
+      gap: 56px;
+      padding: 48px 64px 64px 64px;
+      position: relative;
+    }
+    .hero-editorial-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 680px;
+    }
+    .hero-pretitle-atelier {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-tech);
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--antique-brass);
+    }
+    .hero-pretitle-rule {
+      width: 32px;
+      height: 1px;
+      background: var(--antique-brass);
+    }
+
+    /* Free-Floating Signature Headline (Never in a box) */
+    .hero-signature-serif {
+      font-family: var(--font-serif-display);
+      font-size: clamp(3.2rem, 5.8vw, 5.8rem);
+      font-weight: 400;
+      line-height: 1.05;
+      color: var(--warm-ivory);
+      letter-spacing: -0.02em;
+    }
+    .hero-signature-serif span.gold-italic-text {
+      font-style: italic;
+      color: var(--antique-brass);
+      background: linear-gradient(135deg, var(--champagne-gold), var(--antique-brass));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-family: 'Instrument Serif', var(--font-serif-display);
+    }
+
+    .hero-subtext-creed {
+      font-size: 1.18rem;
+      color: var(--travertine);
+      line-height: 1.68;
+      max-width: 540px;
+      font-weight: 300;
+    }
+
+    .hero-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .btn-atelier-gold {
+      background: var(--antique-brass);
+      border: 1px solid var(--brass-hover);
+      color: var(--atelier-bg);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 14px 34px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 20px rgba(197, 168, 128, 0.28);
+    }
+    .btn-atelier-gold:hover {
+      background: var(--brass-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(197, 168, 128, 0.4);
+    }
+    .btn-atelier-hollow {
+      background: rgba(28, 25, 21, 0.6);
+      border: 1px solid var(--border-medium);
+      color: var(--warm-ivory);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+    }
+    .btn-atelier-hollow:hover {
+      background: var(--atelier-surface-1);
+      border-color: var(--antique-brass);
+    }
+
+    /* Genuine Three.js Interactive 3D Dollhouse Stage (Part 3) */
+    .hero-dollhouse-stage {
+      width: 100%;
+      height: 520px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #hero-dollhouse-canvas-container {
+      width: 100%;
+      height: 100%;
+      border-radius: var(--radius-2xl);
+      overflow: hidden;
+    }
+    .dollhouse-float-hud {
+      position: absolute;
+      bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(21, 19, 16, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      padding: 6px 18px;
+    }
+    .btn-dollhouse-toggle {
+      background: transparent;
+      border: none;
+      color: var(--antique-brass);
+      font-family: var(--font-tech);
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Architectural Showcase Gallery (Section 2) */
+    .overview-showcase-section {
+      padding: 96px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .atelier-section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 650px;
+    }
+    .atelier-sec-tag {
+      font-family: var(--font-tech);
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--antique-brass);
+    }
+    .atelier-sec-title {
+      font-family: var(--font-serif-display);
+      font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--warm-ivory);
+    }
+    .atelier-sec-desc {
+      font-size: 1.05rem;
+      color: var(--travertine);
+      line-height: 1.6;
+    }
+
+    .editorial-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 28px;
+    }
+    .atelier-gallery-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: var(--atelier-surface-1);
+      box-shadow: var(--shadow-md);
+      transition: all 0.35s ease;
+      cursor: pointer;
+    }
+    .atelier-gallery-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-brass);
+      box-shadow: var(--shadow-lg);
+    }
+    .span-7 { grid-column: span 7; aspect-ratio: 16/10; }
+    .span-5 { grid-column: span 5; aspect-ratio: 16/10; }
+    .span-4 { grid-column: span 4; aspect-ratio: 4/3; }
+
+    .atelier-gallery-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .atelier-gallery-card:hover img {
+      transform: scale(1.03);
+    }
+    .card-caption-scrim {
+      position: absolute;
+      bottom: 0; left: 0; width: 100%;
+      padding: 24px;
+      background: linear-gradient(to top, rgba(17, 16, 14, 0.95), transparent);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .card-title-serif {
+      font-family: var(--font-serif-display);
+      font-size: 1.35rem;
+      color: var(--warm-ivory);
+    }
+    .card-meta-tag {
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      color: var(--antique-brass);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Workflow Storytelling Section (Section 3) */
+    .overview-workflow-section {
+      padding: 96px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      background: rgba(24, 22, 19, 0.5);
+      border-top: 1px solid var(--border-subtle);
+    }
+    .workflow-cards-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .atelier-workflow-card {
+      background: var(--atelier-surface-1);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .step-tag-num {
+      font-family: var(--font-tech);
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      color: var(--antique-brass);
+      font-weight: 600;
+    }
+    .step-headline {
+      font-family: var(--font-serif-display);
+      font-size: 1.45rem;
+      color: var(--warm-ivory);
+      line-height: 1.25;
+    }
+    .step-body-copy {
+      font-size: 0.92rem;
+      color: var(--travertine);
+      line-height: 1.6;
+    }
+
+    /* Single Discreet Technology Section */
+    .discreet-tech-section {
+      padding: 72px 64px;
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 48px;
+      align-items: center;
+      background: rgba(17, 16, 14, 0.7);
+    }
+    .tech-badges-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .atelier-tech-badge {
+      background: var(--atelier-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--travertine);
+      font-family: var(--font-tech);
+      font-size: 0.75rem;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* Final CTA Section */
+    .overview-cta-section {
+      padding: 110px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 28px;
+    }
+
+    /* ==========================================================================
+       VIEW 2: CREATIVE STUDIO (DRAWING WORKSPACE FIRST!)
+       ========================================================================== */
+    .studio-view-container {
+      padding: 24px 54px 64px 54px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    /* Dual-Panel Studio Workspace Grid */
+    .studio-dual-panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+      min-height: calc(100vh - 140px);
+    }
+
+    /* Left Panel: Architectural Sketch Studio */
+    .sketch-studio-panel {
+      background: var(--atelier-surface-1);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-2xl);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: var(--shadow-md);
+    }
+    .studio-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 16px;
+    }
+    .panel-headline-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .panel-icon-shield {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-md);
+      background: var(--brass-subtle);
+      color: var(--antique-brass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .panel-title-serif {
+      font-family: var(--font-serif-display);
+      font-size: 1.45rem;
+      color: var(--warm-ivory);
+    }
+
+    /* Drafting Toolbar Dock */
+    .atelier-toolbar-dock {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--atelier-surface-2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 8px 12px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tool-btn-cluster {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-atelier-tool {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-md);
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--natural-taupe);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .btn-atelier-tool:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--warm-ivory);
+    }
+    .btn-atelier-tool.active {
+      background: var(--antique-brass);
+      color: var(--atelier-bg);
+      border-color: var(--brass-hover);
+      box-shadow: 0 2px 8px rgba(197, 168, 128, 0.4);
+    }
+
+    /* Stroke Size Slider */
+    .brush-size-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-tech);
+      font-size: 0.75rem;
+      color: var(--travertine);
+    }
+    .slider-brass {
+      width: 80px;
+      accent-color: var(--antique-brass);
+      cursor: pointer;
+    }
+
+    /* Architectural Ink Swatches */
+    .ink-swatches-cluster {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ink-dot {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .ink-dot.active {
+      border-color: var(--warm-ivory);
+      transform: scale(1.15);
+      box-shadow: 0 0 8px rgba(197, 168, 128, 0.5);
+    }
+    .dot-charcoal { background: #1a1715; }
+    .dot-ivory { background: #fbf9f5; }
+    .dot-brass { background: #c5a880; }
+    .dot-olive { background: #606b5d; }
+    .dot-walnut { background: #3c2f2f; }
+
+    /* Canvas Viewport */
+    .drawing-canvas-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 512px;
+      aspect-ratio: 1/1;
+      margin: 0 auto;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border-medium);
+      background: #181613;
+      box-shadow: var(--shadow-sm);
+    }
+    #drawing-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      cursor: crosshair;
+      z-index: 2;
+    }
+    #grid-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.35;
+    }
+
+    /* Layout Preset Chips Deck */
+    .preset-chips-deck {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0;
+    }
+    .preset-chip-btn {
+      background: var(--atelier-surface-2);
+      border: 1px solid var(--border-subtle);
+      color: var(--travertine);
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .preset-chip-btn:hover {
+      background: var(--atelier-surface-elevated);
+      color: var(--warm-ivory);
+      border-color: var(--antique-brass);
+    }
+
+    /* Synthesis Settings Controls */
+    .synthesis-params-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: var(--atelier-surface-2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+    }
+    .params-split-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .param-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .param-field-label {
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--antique-brass);
+    }
+    .param-input-box {
+      background: var(--atelier-surface-1);
+      border: 1px solid var(--border-subtle);
+      color: var(--warm-ivory);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      outline: none;
+    }
+    .param-input-box:focus {
+      border-color: var(--antique-brass);
+    }
+
+    /* Master Action Button */
+    .btn-synthesize-master {
+      background: linear-gradient(135deg, var(--antique-brass), #a88a60);
+      border: 1px solid var(--brass-hover);
+      color: var(--atelier-bg);
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 16px;
+      border-radius: var(--radius-xl);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 24px rgba(197, 168, 128, 0.35);
+    }
+    .btn-synthesize-master:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(197, 168, 128, 0.5);
+    }
+    .btn-synthesize-master:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Right Panel: Synthesized Interior Viewport */
+    .interior-viewport-panel {
+      background: var(--atelier-surface-1);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-2xl);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* View Mode Tabs in Viewport */
+    .viewport-mode-switcher {
+      display: flex;
+      align-items: center;
+      background: var(--atelier-surface-2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      padding: 3px;
+      gap: 3px;
+    }
+    .viewport-mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--travertine);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .viewport-mode-btn:hover { color: var(--warm-ivory); }
+    .viewport-mode-btn.active {
+      background: var(--antique-brass);
+      color: var(--atelier-bg);
+      font-weight: 700;
+    }
+
+    /* Viewport Display Stage */
+    .viewport-stage-box {
+      position: relative;
+      width: 100%;
+      max-width: 512px;
+      aspect-ratio: 1/1;
+      margin: 0 auto;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border-medium);
+      background: #14120f;
+      box-shadow: var(--shadow-sm);
+    }
+    .stage-view-layer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+
+    /* Empty Placeholder HUD */
+    .viewport-empty-hud {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 32px;
+      text-align: center;
+      color: var(--travertine);
+    }
+    .empty-hud-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--brass-subtle);
+      color: var(--antique-brass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Single Interior Image */
+    #stage-single-image {
+      display: none;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    /* ==========================================================================
+       BEFORE / AFTER COMPARISON (RELIABLE CSS CLIP-PATH & SIDE-BY-SIDE)
+       ========================================================================== */
+    .spatial-compare-wrapper {
+      display: none;
+      position: relative;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      user-select: none;
+      touch-action: none;
+    }
+    .compare-img-bottom {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .compare-img-top {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      clip-path: inset(0 50% 0 0);
+    }
+    .compare-divider-handle {
+      position: absolute;
+      top: 0; left: 50%;
+      width: 3px; height: 100%;
+      background: var(--antique-brass);
+      box-shadow: 0 0 12px rgba(197, 168, 128, 0.6);
+      cursor: ew-resize;
+      transform: translateX(-50%);
+    }
+    .divider-grip-pill {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--antique-brass);
+      border: 2px solid var(--warm-ivory);
+      color: var(--atelier-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Side-by-Side Comparison Container */
+    .spatial-side-by-side-wrapper {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      width: 100%; height: 100%;
+      gap: 2px;
+      background: var(--border-medium);
+    }
+    .side-by-side-cell {
+      position: relative;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #14120f;
+    }
+    .side-by-side-cell img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .side-cell-label {
+      position: absolute;
+      bottom: 8px; left: 8px;
+      background: rgba(17, 16, 14, 0.88);
+      border: 1px solid var(--border-subtle);
+      color: var(--warm-ivory);
+      font-family: var(--font-tech);
+      font-size: 0.68rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    /* Loading / Synthesis Overlay */
+    .stage-loading-overlay {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(17, 16, 14, 0.9);
+      backdrop-filter: blur(8px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      z-index: 10;
+    }
+    .spinning-gyro-loader {
+      width: 56px; height: 56px;
+      border: 3px solid rgba(223, 215, 199, 0.15);
+      border-top-color: var(--antique-brass);
+      border-right-color: var(--honed-bronze);
+      border-radius: 50%;
+      animation: spinGyro 1s linear infinite;
+    }
+    @keyframes spinGyro { to { transform: rotate(360deg); } }
+    .loading-step-msg {
+      font-family: var(--font-serif-display);
+      font-size: 1.25rem;
+      color: var(--warm-ivory);
+    }
+    .loading-timer-badge {
+      font-family: var(--font-tech);
+      font-size: 0.78rem;
+      color: var(--travertine);
+      background: var(--atelier-surface-elevated);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* Viewport Action Controls */
+    .viewport-actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-viewport-action {
+      background: var(--atelier-surface-2);
+      border: 1px solid var(--border-subtle);
+      color: var(--travertine);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .btn-viewport-action:hover {
+      background: var(--atelier-surface-elevated);
+      color: var(--warm-ivory);
+      border-color: var(--antique-brass);
+    }
+    .btn-viewport-action.highlight-3d {
+      background: var(--brass-subtle);
+      border-color: var(--antique-brass);
+      color: var(--warm-ivory);
+    }
+    .btn-viewport-action.highlight-3d:hover {
+      background: var(--antique-brass);
+      color: var(--atelier-bg);
+    }
+
+    /* ==========================================================================
+       PART 7 & 8: REBUILT IMMERSIVE 3D EXPERIENCE (3 DISTINCT MODES)
+       Mode 1: Cinematic Depth View
+       Mode 2: Spatial Walkthrough (First-Person Style)
+       Mode 3: Architectural Orbit View
+       ========================================================================== */
+    .spatial-3d-experience-section {
+      background: var(--atelier-surface-1);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-2xl);
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      box-shadow: var(--shadow-md);
+      margin-top: 12px;
+    }
+    .experience-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .experience-title-block h3 {
+      font-family: var(--font-serif-display);
+      font-size: 1.85rem;
+      color: var(--warm-ivory);
+    }
+    .experience-title-block p {
+      font-size: 0.92rem;
+      color: var(--travertine);
+    }
+
+    /* 3D Mode Selector: Mode 1, Mode 2, Mode 3 */
+    .spatial-mode-switch-dock {
+      display: flex;
+      align-items: center;
+      background: var(--atelier-surface-2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      padding: 4px;
+      gap: 4px;
+    }
+    .spatial-mode-pill {
+      background: transparent;
+      border: none;
+      color: var(--natural-taupe);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .spatial-mode-pill.active {
+      background: var(--antique-brass);
+      color: var(--atelier-bg);
+      font-weight: 700;
+    }
+
+    /* Three.js 3D Viewport Stage */
+    .spatial-canvas-stage {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border-medium);
+      background: #0c0b09;
+      box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
+    }
+    #three-spatial-canvas-container {
+      width: 100%; height: 100%;
+      display: block;
+    }
+
+    /* In-Canvas 3D HUD & Controls */
+    .spatial-hud-overlay {
+      position: absolute;
+      top: 18px; left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .hud-chip {
+      background: rgba(17, 16, 14, 0.88);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle);
+      color: var(--warm-ivory);
+      font-family: var(--font-tech);
+      font-size: 0.75rem;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      pointer-events: auto;
+    }
+    .hud-disclaimer {
+      color: var(--antique-brass);
+      font-size: 0.72rem;
+    }
+
+    /* Floating Camera Presets Bar in 3D Viewport */
+    .camera-presets-bar {
+      position: absolute;
+      bottom: 20px; left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(17, 16, 14, 0.88);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      padding: 6px 12px;
+    }
+    .btn-camera-preset {
+      background: transparent;
+      border: none;
+      color: var(--travertine);
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-camera-preset:hover { color: var(--warm-ivory); }
+    .btn-camera-preset.active {
+      background: var(--antique-brass);
+      color: var(--atelier-bg);
+      font-weight: 700;
+    }
+
+    /* First-Person Navigation Touch D-Pad */
+    .dpad-touch-controls {
+      position: absolute;
+      bottom: 20px; right: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 40px);
+      grid-template-rows: repeat(3, 40px);
+      gap: 4px;
+      background: rgba(17, 16, 14, 0.88);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 6px;
+    }
+    .dpad-btn {
+      background: var(--atelier-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--warm-ivory);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+    }
+    .dpad-btn:active { background: var(--antique-brass); color: var(--atelier-bg); }
+    .dpad-up { grid-column: 2; grid-row: 1; }
+    .dpad-left { grid-column: 1; grid-row: 2; }
+    .dpad-center { grid-column: 2; grid-row: 2; font-size: 0.65rem; color: var(--antique-brass); }
+    .dpad-right { grid-column: 3; grid-row: 2; }
+    .dpad-down { grid-column: 2; grid-row: 3; }
+
+    /* Scroll-Driven Walkthrough Stages Track (Part 9) */
+    .scroll-cinematic-track {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .walkthrough-stage-card {
+      background: var(--atelier-surface-2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .stage-card-info h5 {
+      font-family: var(--font-serif-display);
+      font-size: 1.25rem;
+      color: var(--warm-ivory);
+    }
+    .stage-card-info p {
+      font-size: 0.88rem;
+      color: var(--travertine);
+    }
+
+    /* ==========================================================================
+       VIEW 3: MY DESIGNS ARCHITECTURAL PORTFOLIO
+       ========================================================================== */
+    .designs-view-container {
+      padding: 48px 64px 80px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .designs-header-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .designs-title-block h2 {
+      font-family: var(--font-serif-display);
+      font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+      color: var(--warm-ivory);
+    }
+    .designs-title-block p {
+      font-size: 1.05rem;
+      color: var(--travertine);
+    }
+
+    /* Portfolio Search & Filters */
+    .portfolio-filters-dock {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .search-input-wrapper {
+      position: relative;
+      width: 320px;
+    }
+    .search-input-wrapper input {
+      width: 100%;
+      background: var(--atelier-surface-1);
+      border: 1px solid var(--border-subtle);
+      color: var(--warm-ivory);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      padding: 10px 16px 10px 40px;
+      border-radius: var(--radius-pill);
+      outline: none;
+    }
+    .search-input-wrapper input:focus {
+      border-color: var(--antique-brass);
+    }
+    .search-icon-svg {
+      position: absolute;
+      top: 50%; left: 14px;
+      transform: translateY(-50%);
+      color: var(--antique-brass);
+    }
+
+    .portfolio-filter-chips {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .portfolio-chip {
+      background: var(--atelier-surface-1);
+      border: 1px solid var(--border-subtle);
+      color: var(--travertine);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .portfolio-chip:hover { color: var(--warm-ivory); }
+    .portfolio-chip.active {
+      background: var(--antique-brass);
+      color: var(--atelier-bg);
+      font-weight: 700;
+      border-color: var(--brass-hover);
+    }
+
+    /* Saved Designs Portfolio Grid */
+    .saved-designs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 28px;
+    }
+    .saved-design-card {
+      background: var(--atelier-surface-1);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+    }
+    .saved-design-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-brass);
+    }
+    .card-thumbnail-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: #14120f;
+    }
+    .card-thumbnail-stage img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-sketch-hover-preview {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      background: rgba(17, 16, 14, 0.9);
+    }
+    .card-thumbnail-stage:hover .card-sketch-hover-preview {
+      opacity: 1;
+    }
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-project-title {
+      font-family: var(--font-serif-display);
+      font-size: 1.35rem;
+      color: var(--warm-ivory);
+    }
+    .card-room-badge {
+      background: var(--brass-subtle);
+      border: 1px solid var(--antique-brass);
+      color: var(--champagne-gold);
+      font-family: var(--font-tech);
+      font-size: 0.68rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+    }
+    .card-date-meta {
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      color: var(--natural-taupe);
+    }
+    .card-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .btn-card-action {
+      flex: 1;
+      background: var(--atelier-surface-2);
+      border: 1px solid var(--border-subtle);
+      color: var(--warm-ivory);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 8px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-card-action:hover {
+      background: var(--atelier-surface-elevated);
+      border-color: var(--antique-brass);
+    }
+    .btn-card-delete {
+      width: 32px;
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--muted-ash);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-card-delete:hover {
+      color: #ff6b6b;
+      border-color: #ff6b6b;
+    }
+
+    /* Portfolio Empty State */
+    .portfolio-empty-state {
+      padding: 80px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      color: var(--travertine);
+    }
+
+    /* ==========================================================================
+       MODALS, NOTIFICATIONS & RESPONSIVENESS
+       ========================================================================== */
+    .spatial-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(17, 16, 14, 0.88);
+      backdrop-filter: blur(14px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .spatial-modal-overlay.active { display: flex; }
+    .spatial-modal-box {
+      background: var(--atelier-surface-1);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-2xl);
+      padding: 32px;
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Fullscreen Presentation Mode Curtain */
+    .fullscreen-presentation-curtain {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #0d0c0a;
+      z-index: 2000;
+      flex-direction: column;
+      padding: 32px 54px;
+      gap: 24px;
+    }
+    .fullscreen-presentation-curtain.active { display: flex; }
+    .presentation-head-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .presentation-grid-stage {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    /* Toast Notification */
+    .spatial-toast-banner {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--atelier-surface-1);
+      border: 1px solid var(--antique-brass);
+      color: var(--warm-ivory);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-lg);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Responsive Breakdown */
+    @media (max-width: 1024px) {
+      .overview-hero-container {
+        grid-template-columns: 1fr;
+        padding: 32px 24px;
+      }
+      .studio-dual-panel-grid {
+        grid-template-columns: 1fr;
+      }
+      .editorial-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      .span-7, .span-5, .span-4 { grid-column: span 12; }
+      .workflow-cards-row { grid-template-columns: 1fr 1fr; }
+      .discreet-tech-section { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .atelier-navbar { padding: 12px 18px; }
+      .workflow-cards-row { grid-template-columns: 1fr; }
+      .overview-showcase-section,
+      .overview-workflow-section,
+      .studio-view-container,
+      .designs-view-container {
+        padding: 24px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Warm Golden & Bronze Light Fields -->
+  <div class="atelier-light-fields">
+    <div class="light-glow glow-gold"></div>
+    <div class="light-glow glow-bronze"></div>
+  </div>
+
+  <!-- Fine Architectural Grid Texture -->
+  <div class="atelier-grid-texture"></div>
+
+  <!-- Ambient Golden Dust Particles Canvas (Part 2) -->
+  <canvas id="ambient-particles-canvas"></canvas>
+
+  <!-- ==========================================================================
+       TOP NAVIGATION BAR
+       3 Clean Destinations: Overview, Creative Studio, My Designs
+       ========================================================================== -->
+  <header class="atelier-navbar">
+    <div class="nav-brand-group" onclick="switchAppDestination('overview')">
+      <div class="brand-cube-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </div>
+      <div>
+        <span class="brand-title-text">SketchSpace</span>
+        <span class="brand-atelier-tag">ATELIER</span>
+      </div>
+    </div>
+
+    <nav class="nav-destinations-bar">
+      <button class="nav-destination-btn active" id="nav-btn-overview" onclick="switchAppDestination('overview')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        Overview
+      </button>
+      <button class="nav-destination-btn" id="nav-btn-studio" onclick="switchAppDestination('studio')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+        Creative Studio
+      </button>
+      <button class="nav-destination-btn" id="nav-btn-designs" onclick="switchAppDestination('designs')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        My Designs
+      </button>
+    </nav>
+
+    <div class="nav-actions-group">
+      <button class="btn-nav-pres" onclick="openFullscreenPresentation()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+        Presentation Mode
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ==========================================================================
+         VIEW 1: OVERVIEW HOMEPAGE
+         ========================================================================== -->
+    <div id="view-overview" class="app-destination-view active-destination">
+      
+      <!-- Section 1: Hero -->
+      <section class="overview-hero-container">
+        <div class="hero-editorial-copy">
+          <div class="hero-pretitle-atelier">
+            <span class="hero-pretitle-rule"></span>
+            <span>Architectural Generative Atelier</span>
+          </div>
+          
+          <h1 class="hero-signature-serif">
+            From Imagination<br>
+            <span class="gold-italic-text">to Architecture.</span>
+          </h1>
+
+          <p class="hero-subtext-creed">
+            Where ideas become extraordinary spaces. Transform hand-drawn blueprints, room walls, and furniture contours into photorealistic residential interiors with offline local generative AI.
+          </p>
+
+          <div class="hero-btn-row">
+            <button class="btn-atelier-gold" onclick="switchAppDestination('studio')">
+              <span>Enter Creative Studio</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+            <button class="btn-atelier-hollow" onclick="switchAppDestination('designs')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              <span>Explore My Designs</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Genuine Three.js Interactive 3D Dollhouse Stage (Part 3) -->
+        <div class="hero-dollhouse-stage">
+          <div id="hero-dollhouse-canvas-container"></div>
+
+          <div class="dollhouse-float-hud">
+            <button class="btn-dollhouse-toggle" id="btn-dollhouse-spin-toggle" onclick="toggleHeroDollhouseSpin()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span>Pause Spin</span>
+            </button>
+            <span style="opacity:0.3; color:var(--travertine);">|</span>
+            <span style="font-family:var(--font-tech); font-size:0.72rem; color:var(--travertine);">Interactive Three.js 3D Dollhouse</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Architectural Project Showcase -->
+      <section class="overview-showcase-section">
+        <div class="atelier-section-header">
+          <span class="atelier-sec-tag">Curated Portfolio</span>
+          <h2 class="atelier-sec-title">Architectural Interior Spaces</h2>
+          <p class="atelier-sec-desc">
+            High-CRI architectural photography rendered directly from freehand line blueprints using local diffusion models.
+          </p>
+        </div>
+
+        <div class="editorial-gallery-grid">
+          <div class="atelier-gallery-card span-7" onclick="switchAppDestination('studio')">
+            <img src="/api/image/local_cn_living_room_1795536539194.png" alt="Contemporary Living Room" onerror="this.src='/api/sketches/example/new_living_room_sketch.png'">
+            <div class="card-caption-scrim">
+              <div>
+                <h4 class="card-title-serif">Minimalist Travertine Living Room</h4>
+                <p class="card-meta-tag">Natural Light &bull; Warm Linen &bull; Walnut Finishes</p>
+              </div>
+            </div>
+          </div>
+          <div class="atelier-gallery-card span-5" onclick="switchAppDestination('studio')">
+            <img src="/api/image/local_cn_bedroom_1795531503385.png" alt="Master Bedroom Sanctuary" onerror="this.src='/api/sketches/example/new_bedroom_sketch.png'">
+            <div class="card-caption-scrim">
+              <div>
+                <h4 class="card-title-serif">Master Bedroom Sanctuary</h4>
+                <p class="card-meta-tag">White Oak &bull; Soft Wool &bull; Ambient Glow</p>
+              </div>
+            </div>
+          </div>
+          <div class="atelier-gallery-card span-4" onclick="switchAppDestination('studio')">
+            <img src="/api/image/local_cn_bathroom_1795532521076.png" alt="Calacatta Spa Bathroom" onerror="this.src='/api/sketches/example/new_bathroom_sketch.png'">
+            <div class="card-caption-scrim">
+              <div>
+                <h4 class="card-title-serif">Calacatta Spa Bathroom</h4>
+                <p class="card-meta-tag">Honed Marble &bull; Brass Fixtures</p>
+              </div>
+            </div>
+          </div>
+          <div class="atelier-gallery-card span-4" onclick="switchAppDestination('studio')">
+            <img src="/api/image/local_cn_office_1795531733794.png" alt="Executive Workspace" onerror="this.src='/api/sketches/example/new_office_sketch.png'">
+            <div class="card-caption-scrim">
+              <div>
+                <h4 class="card-title-serif">Executive Creative Studio</h4>
+                <p class="card-meta-tag">Bookshelf Architecture &bull; Minimal Desk</p>
+              </div>
+            </div>
+          </div>
+          <div class="atelier-gallery-card span-4" onclick="switchAppDestination('studio')">
+            <img src="/api/image/local_cn_living_room_1795541707324.png" alt="Bespoke Residential Salon" onerror="this.src='/api/sketches/example/new_living_room_sketch.png'">
+            <div class="card-caption-scrim">
+              <div>
+                <h4 class="card-title-serif">Bespoke Residential Salon</h4>
+                <p class="card-meta-tag">Floor-to-Ceiling Glazing &bull; 8K Photorealism</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: The Design Process (Storytelling) -->
+      <section class="overview-workflow-section">
+        <div class="atelier-section-header">
+          <span class="atelier-sec-tag">Generative Methodology</span>
+          <h2 class="atelier-sec-title">From Hand Gesture to Built Reality</h2>
+          <p class="atelier-sec-desc">
+            Four disciplined phases bridging conceptual sketch ideation and photographic space realization.
+          </p>
+        </div>
+
+        <div class="workflow-cards-row">
+          <div class="atelier-workflow-card">
+            <span class="step-tag-num">PHASE 01</span>
+            <h4 class="step-headline">Concept Gesture</h4>
+            <p class="step-body-copy">Draw walls, windows, and furniture footprints in our 512x512 precision architectural canvas.</p>
+          </div>
+          <div class="atelier-workflow-card">
+            <span class="step-tag-num">PHASE 02</span>
+            <h4 class="step-headline">Spatial Conditioning</h4>
+            <p class="step-body-copy">ControlNet Scribble extracts vector contours and locks architectural proportions.</p>
+          </div>
+          <div class="atelier-workflow-card">
+            <span class="step-tag-num">PHASE 03</span>
+            <h4 class="step-headline">Material Synthesis</h4>
+            <p class="step-body-copy">Latent diffusion denoises realistic finishes, natural sunlight directions, and high-CRI illumination.</p>
+          </div>
+          <div class="atelier-workflow-card">
+            <span class="step-tag-num">PHASE 04</span>
+            <h4 class="step-headline">Spatial 3D Walkthrough</h4>
+            <p class="step-body-copy">Explore depth parallax, camera translation, and perspective movement inside the synthesized room.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Single Discreet Technology Section -->
+      <section class="discreet-tech-section">
+        <div>
+          <span class="atelier-sec-tag">Engineering Foundation</span>
+          <h3 class="atelier-sec-title" style="font-size:2rem; margin-top:8px;">Locally Powered Generative AI</h3>
+        </div>
+        <div>
+          <p class="atelier-sec-desc">
+            SketchSpace AI is engineered for complete independence. By pairing Stable Diffusion 1.5 with ControlNet Scribble via sequential CPU offloading and tiled VAE execution, the entire inference process runs 100% offline on your local machine with zero paid APIs, zero subscriptions, and complete data confidentiality.
+          </p>
+          <div class="tech-badges-flow">
+            <span class="atelier-tech-badge">Stable Diffusion 1.5</span>
+            <span class="atelier-tech-badge">ControlNet Scribble</span>
+            <span class="atelier-tech-badge">100% Offline Mode</span>
+            <span class="atelier-tech-badge">Sequential CPU Offload</span>
+            <span class="atelier-tech-badge">Zero Cloud Dependencies</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Final Call to Action -->
+      <section class="overview-cta-section">
+        <h2 class="atelier-sec-title" style="font-size:clamp(2.8rem, 4.5vw, 4.2rem);">Ready to draft your architectural vision?</h2>
+        <p class="atelier-sec-desc" style="max-width:540px;">
+          Open the Creative Studio to draw your room, configure materials, and generate a photorealistic interior in seconds.
+        </p>
+        <button class="btn-atelier-gold" onclick="switchAppDestination('studio')" style="font-size:1.1rem; padding:16px 40px;">
+          <span>Launch Creative Studio</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </section>
+
+    </div>
+
+    <!-- ==========================================================================
+         VIEW 2: CREATIVE STUDIO (DRAWING WORKSPACE FIRST!)
+         ========================================================================== -->
+    <div id="view-studio" class="app-destination-view">
+      <div class="studio-view-container">
+
+        <!-- DUAL-PANEL WORKSPACE: DRAWING CANVAS FIRST! -->
+        <div class="studio-dual-panel-grid">
+          
+          <!-- LEFT PANEL: ARCHITECTURAL SKETCH STUDIO -->
+          <div class="sketch-studio-panel">
+            <div class="studio-panel-header">
+              <div class="panel-headline-lockup">
+                <div class="panel-icon-shield">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                </div>
+                <div>
+                  <h3 class="panel-title-serif">1. Architectural Sketch Studio</h3>
+                  <p style="font-size:0.78rem; color:var(--travertine);">Precision blueprint &amp; spatial layout drafting</p>
+                </div>
+              </div>
+
+              <!-- Canvas Quick Controls -->
+              <div style="display:flex; gap:6px;">
+                <button class="btn-atelier-tool" id="btn-grid-toggle" title="Toggle Blueprint Grid (G)" onclick="toggleBlueprintGrid()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                </button>
+                <button class="btn-atelier-tool" title="Upload Custom Sketch" onclick="document.getElementById('file-upload-input').click()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                </button>
+                <input type="file" id="file-upload-input" accept="image/*" style="display:none;" onchange="handleCustomSketchUpload(event)">
+                <button class="btn-atelier-tool" title="Download Sketch" onclick="downloadCurrentSketch()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Toolbar Dock -->
+            <div class="atelier-toolbar-dock">
+              <div class="tool-btn-cluster">
+                <button class="btn-atelier-tool active" id="tool-pencil" title="Graphite Pencil (P)" onclick="setDraftingTool('pencil')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                </button>
+                <button class="btn-atelier-tool" id="tool-line" title="Straight Wall Line (L)" onclick="setDraftingTool('line')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="19" x2="19" y2="5"></line></svg>
+                </button>
+                <button class="btn-atelier-tool" id="tool-rect" title="Furniture Rectangle (R)" onclick="setDraftingTool('rect')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+                </button>
+                <button class="btn-atelier-tool" id="tool-eraser" title="Eraser (E)" onclick="setDraftingTool('eraser')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13.5L11.5 20 2 10.5 8.5 4 18 13.5z"></path><path d="M14.5 7L20 12.5"></path></svg>
+                </button>
+              </div>
+
+              <!-- Stroke Size Slider -->
+              <div class="brush-size-control">
+                <span>Size:</span>
+                <input type="range" class="slider-brass" id="stroke-slider" min="1" max="28" value="3" oninput="updateStrokeSize(this.value)">
+                <span id="stroke-val-badge">3px</span>
+              </div>
+
+              <!-- Architectural Ink Swatches -->
+              <div class="ink-swatches-cluster">
+                <button class="ink-dot dot-charcoal active" title="Charcoal" onclick="setInkColor('#1a1715', this)"></button>
+                <button class="ink-dot dot-ivory" title="Warm Ivory" onclick="setInkColor('#fbf9f5', this)"></button>
+                <button class="ink-dot dot-brass" title="Antique Brass" onclick="setInkColor('#c5a880', this)"></button>
+                <button class="ink-dot dot-olive" title="Olive Sage" onclick="setInkColor('#606b5d', this)"></button>
+                <button class="ink-dot dot-walnut" title="Rich Walnut" onclick="setInkColor('#3c2f2f', this)"></button>
+              </div>
+
+              <div class="tool-btn-cluster">
+                <button class="btn-atelier-tool" title="Undo (Ctrl+Z)" onclick="undoCanvasStroke()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                </button>
+                <button class="btn-atelier-tool" title="Redo (Ctrl+Y)" onclick="redoCanvasStroke()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                </button>
+                <button class="btn-atelier-tool" title="Clear Canvas" onclick="clearCanvasAll()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Drawing Canvas Viewport (512x512) -->
+            <div class="drawing-canvas-viewport">
+              <canvas id="drawing-canvas" width="512" height="512"></canvas>
+              <canvas id="grid-canvas" width="512" height="512"></canvas>
+            </div>
+
+            <!-- Layout Presets Deck -->
+            <div>
+              <div style="font-family:var(--font-tech); font-size:0.72rem; color:var(--antique-brass); margin-bottom:6px; letter-spacing:0.08em; text-transform:uppercase;">
+                Architectural Room Presets:
+              </div>
+              <div class="preset-chips-deck">
+                <button class="preset-chip-btn" onclick="loadRoomPresetInStudio('living_room')">Living Room</button>
+                <button class="preset-chip-btn" onclick="loadRoomPresetInStudio('bedroom')">Bedroom</button>
+                <button class="preset-chip-btn" onclick="loadRoomPresetInStudio('kitchen')">Kitchen</button>
+                <button class="preset-chip-btn" onclick="loadRoomPresetInStudio('office')">Office</button>
+                <button class="preset-chip-btn" onclick="loadRoomPresetInStudio('bathroom')">Bathroom</button>
+              </div>
+            </div>
+
+            <!-- Synthesis Settings Controls -->
+            <div class="synthesis-params-card">
+              <div class="params-split-row">
+                <div class="param-field-group">
+                  <label class="param-field-label">Room Category</label>
+                  <select class="param-input-box" id="select-category" onchange="handleCategoryChange(this.value)">
+                    <option value="living_room" selected>Living Room</option>
+                    <option value="bedroom">Master Bedroom</option>
+                    <option value="kitchen">Modern Kitchen</option>
+                    <option value="office">Executive Office</option>
+                    <option value="bathroom">Luxury Bathroom</option>
+                    <option value="dining">Dining Room</option>
+                  </select>
+                </div>
+                <div class="param-field-group">
+                  <label class="param-field-label">Generative Engine</label>
+                  <select class="param-input-box" id="select-model">
+                    <option value="controlnet-local" selected>ControlNet SD 1.5 (Local Offline)</option>
+                    <option value="pix2pix-exp3">Pix2Pix Exp 3 (Compound Loss)</option>
+                    <option value="pix2pix-exp5">Pix2Pix Exp 5 (Perceptual Loss)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="param-field-group">
+                <label class="param-field-label">Architectural Prompt</label>
+                <input type="text" class="param-input-box" id="input-prompt" value="photorealistic modern living room interior, architectural precision, natural daylight through windows, interior walls, ceiling, flooring, architectural digest photography, sharp focus, 8k">
+              </div>
+
+              <div class="params-split-row" style="margin-top: 10px;">
+                <div class="param-field-group">
+                  <label class="param-field-label">Seed (Spatial Latent)</label>
+                  <div style="display:flex; gap:6px;">
+                    <input type="number" class="param-input-box" id="input-seed" placeholder="Random (-1)" value="-1" style="flex:1;">
+                    <button class="btn-atelier-tool" type="button" title="Set to Random" onclick="document.getElementById('input-seed').value = -1; showToast('Seed set to Random');">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="param-field-group">
+                  <label class="param-field-label">Blueprint Adherence</label>
+                  <select class="param-input-box" id="select-conditioning-scale">
+                    <option value="1.0">1.0 — Balanced</option>
+                    <option value="1.15" selected>1.15 — High Fidelity</option>
+                    <option value="1.3">1.3 — Strict Linework Lock</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Master Action Button -->
+            <button class="btn-synthesize-master" id="btn-synthesize-master" onclick="executeStudioSynthesis()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+              <span>Synthesize Architecture</span>
+            </button>
+          </div>
+
+          <!-- RIGHT PANEL: SYNTHESIZED INTERIOR VIEWPORT -->
+          <div class="interior-viewport-panel">
+            <div class="studio-panel-header">
+              <div class="panel-headline-lockup">
+                <div class="panel-icon-shield">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                </div>
+                <div>
+                  <h3 class="panel-title-serif">2. Synthesized Interior Viewport</h3>
+                  <p style="font-size:0.78rem; color:var(--travertine);">High-resolution architectural spatial render</p>
+                </div>
+              </div>
+
+              <!-- Viewport Mode Tabs -->
+              <div class="viewport-mode-switcher">
+                <button class="viewport-mode-btn active" id="tab-mode-render" onclick="switchViewportMode('render')">Render</button>
+                <button class="viewport-mode-btn" id="tab-mode-compare" onclick="switchViewportMode('compare')">Before / After</button>
+                <button class="viewport-mode-btn" id="tab-mode-sketch" onclick="switchViewportMode('sketch')">Sketch</button>
+                <button class="viewport-mode-btn" id="tab-mode-conditioning" onclick="switchViewportMode('conditioning')">Linework</button>
+              </div>
+            </div>
+
+            <!-- Viewport Stage Box (512x512) -->
+            <div class="viewport-stage-box" id="viewport-stage-box">
+              
+              <!-- Empty State HUD -->
+              <div class="viewport-empty-hud" id="viewport-empty-hud">
+                <div class="empty-hud-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                </div>
+                <h4 style="font-family:var(--font-serif-display); font-size:1.35rem; color:var(--warm-ivory);">Awaiting Architectural Blueprint</h4>
+                <p style="font-size:0.88rem; max-width:320px;">
+                  Sketch walls and furniture on the left canvas or select a room preset, then click Synthesize Architecture.
+                </p>
+              </div>
+
+              <!-- Single Image View (Mode 1) -->
+              <img id="stage-single-image" class="stage-view-layer" alt="Synthesized Interior Render">
+
+              <!-- Before / After Reveal Slider (Mode 2 - Fixed CSS Clip-Path) -->
+              <div class="spatial-compare-wrapper" id="stage-compare-slider">
+                <img class="compare-img-bottom" id="compare-bottom-img" alt="Generated Interior">
+                <img class="compare-img-top" id="compare-top-img" alt="Original Sketch">
+                <div class="compare-divider-handle" id="compare-divider-handle">
+                  <div class="divider-grip-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Side-by-Side Comparison (Mode 2 Alt) -->
+              <div class="spatial-side-by-side-wrapper" id="stage-side-by-side">
+                <div class="side-by-side-cell">
+                  <img id="sbs-sketch-img" alt="Original Sketch">
+                  <span class="side-cell-label">Original Sketch</span>
+                </div>
+                <div class="side-by-side-cell">
+                  <img id="sbs-render-img" alt="Generated Interior">
+                  <span class="side-cell-label">Synthesized Interior</span>
+                </div>
+              </div>
+
+              <!-- Original Sketch Inspect View (Mode 3) -->
+              <img id="stage-sketch-image" class="stage-view-layer" style="display:none; width:100%; height:100%; object-fit:cover;" alt="Input Sketch">
+
+              <!-- Extracted Linework Conditioning View (Mode 4) -->
+              <img id="stage-conditioning-image" class="stage-view-layer" style="display:none; width:100%; height:100%; object-fit:contain; background:#000;" alt="Extracted Linework Conditioning">
+
+              <!-- Synthesis Loading Sequence Overlay -->
+              <div class="stage-loading-overlay" id="stage-loading-overlay">
+                <div class="spinning-gyro-loader"></div>
+                <div class="loading-step-msg" id="loading-step-text">Synthesizing Architectural Space...</div>
+                <div class="loading-timer-badge" id="loading-timer-badge">0.0 s</div>
+              </div>
+            </div>
+
+            <!-- Viewport Actions Bar -->
+            <div class="viewport-actions-bar">
+              <div style="display:flex; gap:8px;">
+                <button class="btn-viewport-action" id="btn-toggle-compare-mode" title="Toggle Slider vs Side-by-Side" onclick="toggleCompareModeLayout()" style="display:none;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line></svg>
+                  <span id="compare-layout-mode-label">Side-by-Side View</span>
+                </button>
+                <button class="btn-viewport-action" id="btn-download-render" onclick="downloadGeneratedInterior()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  <span>Download Interior</span>
+                </button>
+                <button class="btn-viewport-action" id="btn-save-design" onclick="openSaveDesignModal()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                  <span>Save to My Designs</span>
+                </button>
+              </div>
+
+              <div>
+                <button class="btn-viewport-action highlight-3d" onclick="scrollToSpatial3DExperience()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                  <span>Explore in 3D Walkthrough</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================================================
+             PART 7 & 8: REBUILT 3D SPATIAL EXPERIENCE (3 DISTINCT MODES)
+             ========================================================================== -->
+        <section class="spatial-3d-experience-section" id="section-spatial-3d-experience">
+          <div class="experience-header-row">
+            <div class="experience-title-block">
+              <h3>First-Person Spatial 3D Experience</h3>
+              <p id="spatial-mode-subtext">Mode 1 &bull; Cinematic Depth View (Subtle parallax &amp; ambient studio lighting)</p>
+            </div>
+
+            <!-- 3 Distinct Modes: Mode 1, Mode 2, Mode 3 -->
+            <div class="spatial-mode-switch-dock">
+              <button class="spatial-mode-pill active" id="tab-3d-mode-1" onclick="switch3DViewingExperience(1)">
+                <span>Mode 1: Cinematic Depth</span>
+              </button>
+              <button class="spatial-mode-pill" id="tab-3d-mode-2" onclick="switch3DViewingExperience(2)">
+                <span>Mode 2: Spatial Walkthrough</span>
+              </button>
+              <button class="spatial-mode-pill" id="tab-3d-mode-3" onclick="switch3DViewingExperience(3)">
+                <span>Mode 3: Architectural Orbit</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Three.js 3D Viewport Stage -->
+          <div class="spatial-canvas-stage" id="spatial-3d-stage-container">
+            <div id="three-spatial-canvas-container"></div>
+
+            <!-- HUD & Controls Info Overlay -->
+            <div class="spatial-hud-overlay">
+              <div class="hud-chip" id="hud-chip-mode">Mode 1: Cinematic Depth View</div>
+              <div class="hud-chip" id="hud-chip-gen-id" style="color: var(--accent-gold); font-family: monospace; font-size: 0.72rem;">Gen: Initializing...</div>
+              <div class="hud-chip" id="hud-chip-inspect" style="cursor: pointer; pointer-events: auto; border-color: rgba(212,175,55,0.5); color: var(--accent-gold);" onclick="toggleTechnicalInspector()">&#9776; Object Inventory (14)</div>
+              <div class="hud-chip hud-disclaimer" id="hud-chip-disclaimer">
+                AI Depth-Based Spatial Preview. Visualizes relative depth and architectural perspective parallax from a single viewpoint.
+              </div>
+            </div>
+
+            <!-- Technical Object Inventory Inspection Panel -->
+            <div id="spatial-inventory-panel" style="display: none; position: absolute; top: 18px; right: 18px; bottom: 65px; width: 380px; max-width: 90%; background: rgba(15, 14, 12, 0.94); backdrop-filter: blur(12px); border: 1px solid var(--border-medium); border-radius: 8px; z-index: 30; padding: 16px; overflow-y: auto; color: var(--warm-ivory); box-shadow: 0 10px 40px rgba(0,0,0,0.7);">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px; margin-bottom: 12px;">
+                <div style="font-family: var(--font-heading); font-size: 1.05rem; letter-spacing: 0.05em; color: var(--accent-gold);">Detected Scene Inventory</div>
+                <button onclick="toggleTechnicalInspector()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;">&times;</button>
+              </div>
+              <div id="inspector-summary-stats" style="font-family: var(--font-tech); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;"></div>
+              <div id="inspector-object-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+
+            <!-- Honest 3D Reconstruction Status HUD -->
+            <div id="spatial-reconstruction-hud" style="display: none; position: absolute; inset: 0; background: rgba(12,11,9,0.85); backdrop-filter: blur(8px); z-index: 25; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--warm-ivory);">
+              <div style="width: 36px; height: 36px; border: 3px solid rgba(212,175,55,0.2); border-top-color: var(--accent-gold); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+              <div style="font-family: var(--font-heading); font-size: 1.15rem; letter-spacing: 0.05em;" id="recon-step-title">Reconstructing Spatial Geometry</div>
+              <div style="font-family: var(--font-tech); font-size: 0.82rem; color: var(--text-muted);" id="recon-step-detail">Segmenting architectural objects from generated interior...</div>
+              <div style="font-family: monospace; font-size: 0.75rem; color: var(--accent-gold); background: rgba(0,0,0,0.5); padding: 4px 12px; border-radius: 4px; border: 1px solid rgba(212,175,55,0.3);" id="recon-step-gen-id">ID: gen_active</div>
+            </div>
+
+            <!-- Camera Presets Bar -->
+            <div class="camera-presets-bar">
+              <button class="btn-camera-preset active" id="cam-preset-default" onclick="setCameraViewPreset('default')">Eye-Level</button>
+              <button class="btn-camera-preset" id="cam-preset-orbit" onclick="setCameraViewPreset('orbit')">Perspective</button>
+              <button class="btn-camera-preset" id="cam-preset-front" onclick="setCameraViewPreset('front')">Front</button>
+              <button class="btn-camera-preset" id="cam-preset-side" onclick="setCameraViewPreset('side')">Side</button>
+              <button class="btn-camera-preset" id="cam-preset-top" onclick="setCameraViewPreset('top')">Top (Plan)</button>
+              <button class="btn-camera-preset" id="cam-preset-cutaway" onclick="toggleCeilingCutaway()">Ceiling: Enclosed</button>
+              <button class="btn-camera-preset" id="cam-preset-auto-orbit" onclick="toggleAutoOrbit()">Auto-Orbit: Off</button>
+              <button class="btn-camera-preset" id="cam-preset-reset" onclick="reset3DCameraPosition()">Reset</button>
+            </div>
+
+            <!-- On-Screen D-Pad for Touch/Tablet Walkthrough -->
+            <div class="dpad-touch-controls">
+              <button class="dpad-btn dpad-up" title="Move Forward (W)" onmousedown="startKeyMove('w')" onmouseup="stopKeyMove('w')">&uarr;</button>
+              <button class="dpad-btn dpad-left" title="Strafe Left (A)" onmousedown="startKeyMove('a')" onmouseup="stopKeyMove('a')">&larr;</button>
+              <div class="dpad-center">MOVE</div>
+              <button class="dpad-btn dpad-right" title="Strafe Right (D)" onmousedown="startKeyMove('d')" onmouseup="stopKeyMove('d')">&rarr;</button>
+              <button class="dpad-btn dpad-down" title="Move Back (S)" onmousedown="startKeyMove('s')" onmouseup="stopKeyMove('s')">&darr;</button>
+            </div>
+          </div>
+
+          <!-- Part 9: Scroll-Driven Cinematic Walkthrough Stages -->
+          <div class="scroll-cinematic-track">
+            <div class="walkthrough-stage-card">
+              <div class="stage-card-info">
+                <h5>Stage 1 &bull; High-Resolution Photographic Framing</h5>
+                <p>The synthesized architectural interior is rendered at high resolution with true material illumination.</p>
+              </div>
+              <span class="atelier-tech-badge">Photorealism</span>
+            </div>
+            <div class="walkthrough-stage-card">
+              <div class="stage-card-info">
+                <h5>Stage 2 &bull; Relative Depth &amp; Topography Emergence</h5>
+                <p>Architectural depth cues calculate vanishing planes, ceiling slopes, and furniture elevations.</p>
+              </div>
+              <span class="atelier-tech-badge">Depth Mapping</span>
+            </div>
+            <div class="walkthrough-stage-card">
+              <div class="stage-card-info">
+                <h5>Stage 3 &bull; Perspective Dolly-In Camera Transition</h5>
+                <p>Camera translates smoothly forward into the interior volume without edge distortion.</p>
+              </div>
+              <span class="atelier-tech-badge">Spatial Dolly</span>
+            </div>
+            <div class="walkthrough-stage-card">
+              <div class="stage-card-info">
+                <h5>Stage 4 &bull; First-Person Room Exploration</h5>
+                <p>Full mouse look and WASD translation allow moving through the space in real time.</p>
+              </div>
+              <span class="atelier-tech-badge">Interactive 3D</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         VIEW 3: MY DESIGNS ARCHITECTURAL PORTFOLIO
+         ========================================================================== -->
+    <div id="view-designs" class="app-destination-view">
+      <div class="designs-view-container">
+
+        <div class="designs-header-row">
+          <div class="designs-title-block">
+            <span class="atelier-sec-tag">Personal Portfolio</span>
+            <h2>My Architectural Designs</h2>
+            <p>Your saved synthesized spaces, original blueprints, and spatial explorations.</p>
+          </div>
+
+          <button class="btn-atelier-gold" onclick="switchAppDestination('studio')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Create New Design</span>
+          </button>
+        </div>
+
+        <!-- Portfolio Search & Filters -->
+        <div class="portfolio-filters-dock">
+          <div class="search-input-wrapper">
+            <svg class="search-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="portfolio-search-input" placeholder="Search saved designs..." oninput="filterSavedDesignsGallery()">
+          </div>
+
+          <div class="portfolio-filter-chips">
+            <button class="portfolio-chip active" onclick="setPortfolioCategoryFilter('all', this)">All Spaces</button>
+            <button class="portfolio-chip" onclick="setPortfolioCategoryFilter('living_room', this)">Living Room</button>
+            <button class="portfolio-chip" onclick="setPortfolioCategoryFilter('bedroom', this)">Bedroom</button>
+            <button class="portfolio-chip" onclick="setPortfolioCategoryFilter('kitchen', this)">Kitchen</button>
+            <button class="portfolio-chip" onclick="setPortfolioCategoryFilter('office', this)">Office</button>
+            <button class="portfolio-chip" onclick="setPortfolioCategoryFilter('bathroom', this)">Bathroom</button>
+          </div>
+        </div>
+
+        <!-- Saved Designs Grid -->
+        <div class="saved-designs-grid" id="saved-designs-grid-container">
+          <!-- Populated dynamically via JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="portfolio-empty-state" id="portfolio-empty-state" style="display:none;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          <h4 style="font-family:var(--font-serif-display); font-size:1.45rem; color:var(--warm-ivory);">No Saved Designs Found</h4>
+          <p style="font-size:0.92rem; max-width:360px;">
+            Synthesize an interior in Creative Studio and click "Save to My Designs" to build your portfolio.
+          </p>
+          <button class="btn-atelier-gold" onclick="switchAppDestination('studio')" style="margin-top:12px;">
+            Enter Creative Studio
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Save Design Modal -->
+    <div class="spatial-modal-overlay" id="save-design-modal">
+      <div class="spatial-modal-box">
+        <h3 style="font-family:var(--font-serif-display); font-size:1.6rem; color:var(--warm-ivory);">Save Project to My Designs</h3>
+        <p style="font-size:0.88rem; color:var(--travertine);">
+          Add an architectural title and optional notes to catalog this interior in your personal design portfolio.
+        </p>
+
+        <div class="param-field-group">
+          <label class="param-field-label">Project Title</label>
+          <input type="text" class="param-input-box" id="save-design-title" value="Bespoke Residential Salon">
+        </div>
+
+        <div class="param-field-group">
+          <label class="param-field-label">Architectural Notes</label>
+          <input type="text" class="param-input-box" id="save-design-notes" placeholder="e.g. Travertine slab, antique brass trim, soft linen drapery">
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:10px;">
+          <button class="btn-viewport-action" onclick="closeSaveDesignModal()">Cancel</button>
+          <button class="btn-atelier-gold" onclick="confirmSaveCurrentDesign()" style="padding:10px 24px; font-size:0.92rem;">Save Design</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fullscreen Presentation Mode Curtain -->
+    <div class="fullscreen-presentation-curtain" id="fullscreen-presentation-curtain">
+      <div class="presentation-head-row">
+        <div>
+          <h3 style="font-family:var(--font-serif-display); font-size:1.8rem; color:var(--warm-ivory);">SketchSpace AI &bull; Architectural Presentation</h3>
+          <p style="font-size:0.85rem; color:var(--travertine);">Academic Generative AI Architecture Demonstration</p>
+        </div>
+        <button class="btn-viewport-action" onclick="closeFullscreenPresentation()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          <span>Exit Presentation</span>
+        </button>
+      </div>
+
+      <div class="presentation-grid-stage">
+        <div style="display:flex; flex-direction:column; gap:10px; height:100%;">
+          <span class="atelier-tech-badge" style="align-self:flex-start;">Input Architectural Blueprint</span>
+          <div style="flex:1; border-radius:var(--radius-xl); overflow:hidden; border:1px solid var(--border-medium); background:#181613;">
+            <img id="pres-sketch-img" src="/api/sketches/example/new_living_room_sketch.png" style="width:100%; height:100%; object-fit:contain;" alt="Input Sketch">
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px; height:100%;">
+          <span class="atelier-tech-badge" style="align-self:flex-start; background:var(--antique-brass); color:var(--atelier-bg); font-weight:700;">Synthesized Photorealistic Interior</span>
+          <div style="flex:1; border-radius:var(--radius-xl); overflow:hidden; border:1px solid var(--border-medium); background:#181613;">
+            <img id="pres-render-img" src="/api/image/local_cn_living_room_1795536539194.png" style="width:100%; height:100%; object-fit:contain;" alt="Synthesized Interior">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Banner -->
+    <div class="spatial-toast-banner" id="spatial-toast">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      <span id="toast-message-text">Notification</span>
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       JAVASCRIPT CORE LOGIC & ENGINES
+       ========================================================================== -->
+  <script>
+    /* Global Application State */
+    const AppState = {
+      activeDestination: 'overview',
+      currentGenerationId: 'gen_living_room_1795548995653',
+      currentSketchUrl: '/api/sketches/example/new_living_room_sketch.png',
+      currentGeneratedUrl: '/api/image/local_cn_living_room_1795548995653.png',
+      currentDepthUrl: '/api/depth/local_cn_living_room_1795548995653.png',
+      currentConditioningUrl: '/api/conditioning/local_cn_living_room_1795548995653_conditioning.png',
+      currentSceneUrl: '/api/scene-objects/local_cn_living_room_1795548995653.png',
+      activeCategory: 'living_room',
+      viewportMode: 'render', // 'render', 'compare', 'sketch', 'conditioning'
+      compareLayout: 'slider', // 'slider', 'side-by-side'
+      compareSplitPercent: 50,
+      active3DMode: 1, // 1: Cinematic Depth, 2: Spatial Walkthrough, 3: Architectural Orbit
+      savedDesigns: [],
+      cameraKeyMove: { w: false, a: false, s: false, d: false }
+    };
+
+    /* ==========================================================================
+       PART 2: MOUSE-REACTIVE GOLDEN DUST PARTICLE SYSTEM
+       Delicate illuminated golden dust particles reacting gently to pointer movement.
+       ========================================================================== */
+    class GoldenDustParticleEngine {
+      constructor() {
+        this.canvas = document.getElementById('ambient-particles-canvas');
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.particleCount = 55;
+        this.mouseX = -1000;
+        this.mouseY = -1000;
+        this.prevMouseX = -1000;
+        this.prevMouseY = -1000;
+        this.mouseSpeed = 0;
+        this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        this.initCanvasSize();
+        this.initParticles();
+        this.bindEvents();
+        this.render();
+      }
+
+      initCanvasSize() {
+        this.width = this.canvas.width = window.innerWidth;
+        this.height = this.canvas.height = window.innerHeight;
+      }
+
+      initParticles() {
+        this.particles = [];
+        for (let i = 0; i < this.particleCount; i++) {
+          this.particles.push({
+            x: Math.random() * this.width,
+            y: Math.random() * this.height,
+            size: Math.random() * 1.8 + 0.8,
+            vx: (Math.random() - 0.5) * 0.35,
+            vy: -Math.random() * 0.45 - 0.15, // Gentle upward drift like warm air
+            alpha: Math.random() * 0.35 + 0.15,
+            baseAlpha: Math.random() * 0.35 + 0.15,
+            sway: Math.random() * Math.PI * 2,
+            swaySpeed: Math.random() * 0.02 + 0.01
+          });
+        }
+      }
+
+      bindEvents() {
+        window.addEventListener('resize', () => {
+          this.initCanvasSize();
+          this.initParticles();
+        });
+
+        window.addEventListener('pointermove', (e) => {
+          const dx = e.clientX - this.prevMouseX;
+          const dy = e.clientY - this.prevMouseY;
+          this.mouseSpeed = Math.sqrt(dx * dx + dy * dy);
+          this.prevMouseX = this.mouseX;
+          this.prevMouseY = this.mouseY;
+          this.mouseX = e.clientX;
+          this.mouseY = e.clientY;
+        });
+
+        window.addEventListener('pointerleave', () => {
+          this.mouseX = -1000;
+          this.mouseY = -1000;
+        });
+      }
+
+      render() {
+        requestAnimationFrame(() => this.render());
+        if (this.isReducedMotion) return;
+
+        this.ctx.clearRect(0, 0, this.width, this.height);
+
+        for (let i = 0; i < this.particles.length; i++) {
+          const p = this.particles[i];
+
+          // Natural gentle drift
+          p.sway += p.swaySpeed;
+          p.x += p.vx + Math.sin(p.sway) * 0.25;
+          p.y += p.vy;
+
+          // Pointer interaction: subtle golden swirl near pointer
+          const dx = this.mouseX - p.x;
+          const dy = this.mouseY - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const maxDist = 140;
+
+          if (dist < maxDist && dist > 1) {
+            const force = (1 - dist / maxDist) * 0.45;
+            p.x += (dx / dist) * force;
+            p.y += (dy / dist) * force;
+            p.alpha = Math.min(0.85, p.baseAlpha + (1 - dist / maxDist) * 0.5);
+          } else {
+            p.alpha += (p.baseAlpha - p.alpha) * 0.05;
+          }
+
+          // Wrap edges
+          if (p.y < -10) { p.y = this.height + 10; p.x = Math.random() * this.width; }
+          if (p.x < -10) p.x = this.width + 10;
+          if (p.x > this.width + 10) p.x = -10;
+
+          // Draw illuminated golden particle
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          this.ctx.fillStyle = `rgba(197, 168, 128, ${p.alpha})`;
+          this.ctx.shadowBlur = p.size * 3;
+          this.ctx.shadowColor = 'rgba(216, 188, 148, 0.4)';
+          this.ctx.fill();
+        }
+      }
+    }
+
+    /* ==========================================================================
+       PART 3: HERO THREE.JS INTERACTIVE 3D CUTAWAY DOLLHOUSE
+       Genuine 3D room with travertine floor slab, walnut walls, and furniture.
+       ========================================================================== */
+    let heroDollhouseScene, heroDollhouseCamera, heroDollhouseRenderer, heroDollhouseGroup;
+    let isHeroDollhouseSpinning = true;
+    let heroDollhouseTargetRotY = 0;
+
+    function initHeroThreeDollhouse() {
+      const container = document.getElementById('hero-dollhouse-canvas-container');
+      if (!container) return;
+
+      heroDollhouseScene = new THREE.Scene();
+
+      heroDollhouseCamera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 100);
+      heroDollhouseCamera.position.set(5.5, 4.2, 6.2);
+      heroDollhouseCamera.lookAt(0, -0.2, 0);
+
+      heroDollhouseRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      heroDollhouseRenderer.setSize(container.clientWidth, container.clientHeight);
+      heroDollhouseRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      heroDollhouseRenderer.shadowMap.enabled = true;
+      heroDollhouseRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.appendChild(heroDollhouseRenderer.domElement);
+
+      // Warm Amber & Studio Illumination
+      const ambLight = new THREE.AmbientLight(0xfbf9f5, 0.75);
+      heroDollhouseScene.add(ambLight);
+
+      const sunLight = new THREE.DirectionalLight(0xffeedd, 1.2);
+      sunLight.position.set(6, 9, 5);
+      sunLight.castShadow = true;
+      sunLight.shadow.mapSize.width = 1024;
+      sunLight.shadow.mapSize.height = 1024;
+      heroDollhouseScene.add(sunLight);
+
+      const warmSpot = new THREE.PointLight(0xc5a880, 0.8, 12);
+      warmSpot.position.set(0, 3, 0);
+      heroDollhouseScene.add(warmSpot);
+
+      // Construct Dollhouse Group
+      heroDollhouseGroup = new THREE.Group();
+
+      // 1. Travertine Floor Slab
+      const slabGeom = new THREE.BoxGeometry(4.2, 0.25, 4.2);
+      const slabMat = new THREE.MeshStandardMaterial({ color: 0xdfd7c7, roughness: 0.35, metalness: 0.05 });
+      const slab = new THREE.Mesh(slabGeom, slabMat);
+      slab.position.y = -0.125;
+      slab.receiveShadow = true;
+      heroDollhouseGroup.add(slab);
+
+      // 2. Walnut Back Wall
+      const backWallGeom = new THREE.BoxGeometry(4.2, 2.8, 0.15);
+      const backWallMat = new THREE.MeshStandardMaterial({ color: 0x3c2f2f, roughness: 0.6 });
+      const backWall = new THREE.Mesh(backWallGeom, backWallMat);
+      backWall.position.set(0, 1.4, -2.025);
+      backWall.castShadow = true;
+      backWall.receiveShadow = true;
+      heroDollhouseGroup.add(backWall);
+
+      // 3. Left Wall with Cutout Window
+      const leftWallGeom = new THREE.BoxGeometry(0.15, 2.8, 4.2);
+      const leftWallMat = new THREE.MeshStandardMaterial({ color: 0x2a2420, roughness: 0.7 });
+      const leftWall = new THREE.Mesh(leftWallGeom, leftWallMat);
+      leftWall.position.set(-2.025, 1.4, 0);
+      leftWall.castShadow = true;
+      leftWall.receiveShadow = true;
+      heroDollhouseGroup.add(leftWall);
+
+      // 4. Architectural Wood Slats on Back Wall
+      const slatMat = new THREE.MeshStandardMaterial({ color: 0x221a1a, roughness: 0.5 });
+      for (let s = -1.8; s <= 1.8; s += 0.28) {
+        const slatGeom = new THREE.BoxGeometry(0.08, 2.8, 0.06);
+        const slat = new THREE.Mesh(slatGeom, slatMat);
+        slat.position.set(s, 1.4, -1.92);
+        heroDollhouseGroup.add(slat);
+      }
+
+      // 5. Minimalist Linen Sofa
+      const sofaBaseGeom = new THREE.BoxGeometry(1.9, 0.45, 0.85);
+      const sofaMat = new THREE.MeshStandardMaterial({ color: 0xc5a880, roughness: 0.8 });
+      const sofaBase = new THREE.Mesh(sofaBaseGeom, sofaMat);
+      sofaBase.position.set(0.3, 0.25, -1.1);
+      sofaBase.castShadow = true;
+      heroDollhouseGroup.add(sofaBase);
+
+      const sofaBackGeom = new THREE.BoxGeometry(1.9, 0.5, 0.22);
+      const sofaBack = new THREE.Mesh(sofaBackGeom, sofaMat);
+      sofaBack.position.set(0.3, 0.65, -1.45);
+      heroDollhouseGroup.add(sofaBack);
+
+      // 6. Travertine & Brass Coffee Table
+      const tableGeom = new THREE.CylinderGeometry(0.5, 0.5, 0.28, 32);
+      const tableMat = new THREE.MeshStandardMaterial({ color: 0xdfd7c7, roughness: 0.25, metalness: 0.15 });
+      const table = new THREE.Mesh(tableGeom, tableMat);
+      table.position.set(0.3, 0.14, -0.2);
+      table.castShadow = true;
+      heroDollhouseGroup.add(table);
+
+      // 7. Platform Bed (Bedroom corner)
+      const bedGeom = new THREE.BoxGeometry(1.4, 0.4, 1.8);
+      const bedMat = new THREE.MeshStandardMaterial({ color: 0x8c7853, roughness: 0.7 });
+      const bed = new THREE.Mesh(bedGeom, bedMat);
+      bed.position.set(-1.1, 0.2, 0.8);
+      bed.castShadow = true;
+      heroDollhouseGroup.add(bed);
+
+      // 8. Olive Plant in Pot
+      const potGeom = new THREE.CylinderGeometry(0.2, 0.15, 0.4, 16);
+      const potMat = new THREE.MeshStandardMaterial({ color: 0x3c2f2f, roughness: 0.8 });
+      const pot = new THREE.Mesh(potGeom, potMat);
+      pot.position.set(-1.6, 0.2, -1.6);
+      heroDollhouseGroup.add(pot);
+
+      const foliageGeom = new THREE.DodecahedronGeometry(0.35, 1);
+      const foliageMat = new THREE.MeshStandardMaterial({ color: 0x606b5d, roughness: 0.9 });
+      const foliage = new THREE.Mesh(foliageGeom, foliageMat);
+      foliage.position.set(-1.6, 0.65, -1.6);
+      heroDollhouseGroup.add(foliage);
+
+      heroDollhouseScene.add(heroDollhouseGroup);
+
+      // Pointer Parallax Easing
+      container.addEventListener('pointermove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const nx = (e.clientX - rect.left) / rect.width - 0.5;
+        const ny = (e.clientY - rect.top) / rect.height - 0.5;
+        heroDollhouseTargetRotY = nx * 0.6;
+        heroDollhouseCamera.position.y = 4.2 - ny * 0.8;
+      });
+
+      // Window resize
+      window.addEventListener('resize', () => {
+        if (!heroDollhouseCamera || !heroDollhouseRenderer) return;
+        heroDollhouseCamera.aspect = container.clientWidth / container.clientHeight;
+        heroDollhouseCamera.updateProjectionMatrix();
+        heroDollhouseRenderer.setSize(container.clientWidth, container.clientHeight);
+      });
+
+      animateHeroDollhouse();
+    }
+
+    function animateHeroDollhouse() {
+      requestAnimationFrame(animateHeroDollhouse);
+      if (!heroDollhouseGroup || !heroDollhouseRenderer) return;
+
+      if (isHeroDollhouseSpinning) {
+        heroDollhouseGroup.rotation.y += 0.0035;
+      } else {
+        heroDollhouseGroup.rotation.y += (heroDollhouseTargetRotY - heroDollhouseGroup.rotation.y) * 0.05;
+      }
+
+      heroDollhouseRenderer.render(heroDollhouseScene, heroDollhouseCamera);
+    }
+
+    function toggleHeroDollhouseSpin() {
+      isHeroDollhouseSpinning = !isHeroDollhouseSpinning;
+      const btn = document.getElementById('btn-dollhouse-spin-toggle');
+      if (btn) {
+        btn.querySelector('span').innerText = isHeroDollhouseSpinning ? 'Pause Spin' : 'Resume Spin';
+      }
+    }
+
+    /* ==========================================================================
+       ROUTING & DESTINATIONS MANAGEMENT
+       Overview, Creative Studio, My Designs
+       ========================================================================== */
+    function switchAppDestination(destKey) {
+      if (!['overview', 'studio', 'designs'].includes(destKey)) destKey = 'overview';
+      AppState.activeDestination = destKey;
+
+      // Update Nav Buttons
+      document.querySelectorAll('.nav-destination-btn').forEach(b => b.classList.remove('active'));
+      const activeNavBtn = document.getElementById(`nav-btn-${destKey}`);
+      if (activeNavBtn) activeNavBtn.classList.add('active');
+
+      // Update Views
+      document.querySelectorAll('.app-destination-view').forEach(v => v.classList.remove('active-destination'));
+      const targetView = document.getElementById(`view-${destKey}`);
+      if (targetView) targetView.classList.add('active-destination');
+
+      // Update URL Hash
+      if (window.location.hash !== `#${destKey}`) {
+        history.pushState(null, '', `#${destKey}`);
+      }
+
+      if (destKey === 'studio') {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (!urlParams.get('mode3d')) {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+        initDrawingCanvasIfNeeded();
+      } else if (destKey === 'designs') {
+        renderSavedDesignsGallery();
+      }
+    }
+
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) switchAppDestination(hash);
+    });
+
+    /* ==========================================================================
+       DRAWING CANVAS WORKSPACE (DRAWING FIRST!)
+       ========================================================================== */
+    let canvas, ctx, gridCanvas, gridCtx;
+    let isDrawing = false;
+    let currentTool = 'pencil';
+    let currentStrokeColor = '#1a1715';
+    let currentStrokeWidth = 3;
+    let startX = 0, startY = 0;
+    let canvasSnapshot = null;
+    let undoStack = [];
+    let redoStack = [];
+    let isCanvasInitialized = false;
+    let showGrid = true;
+
+    function initDrawingCanvasIfNeeded() {
+      if (isCanvasInitialized) return;
+      canvas = document.getElementById('drawing-canvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+      gridCanvas = document.getElementById('grid-canvas');
+      gridCtx = gridCanvas.getContext('2d');
+
+      ctx.fillStyle = '#fbf9f5';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      saveCanvasState();
+
+      drawBlueprintGrid();
+
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', drawMove);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseleave', stopDrawing);
+
+      canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+      canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+      canvas.addEventListener('touchend', stopDrawing, { passive: false });
+
+      isCanvasInitialized = true;
+      loadRoomPresetInStudio('living_room');
+    }
+
+    function getCanvasCoordinates(e) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      let clientX = e.clientX;
+      let clientY = e.clientY;
+      if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      }
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    function startDrawing(e) {
+      isDrawing = true;
+      const coords = getCanvasCoordinates(e);
+      startX = coords.x;
+      startY = coords.y;
+      canvasSnapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.strokeStyle = (currentTool === 'eraser') ? '#fbf9f5' : currentStrokeColor;
+      ctx.lineWidth = currentStrokeWidth;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    }
+
+    function drawMove(e) {
+      if (!isDrawing) return;
+      const coords = getCanvasCoordinates(e);
+
+      if (currentTool === 'pencil' || currentTool === 'eraser') {
+        ctx.lineTo(coords.x, coords.y);
+        ctx.stroke();
+      } else if (currentTool === 'line') {
+        ctx.putImageData(canvasSnapshot, 0, 0);
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(coords.x, coords.y);
+        ctx.stroke();
+      } else if (currentTool === 'rect') {
+        ctx.putImageData(canvasSnapshot, 0, 0);
+        ctx.beginPath();
+        ctx.strokeRect(startX, startY, coords.x - startX, coords.y - startY);
+      }
+    }
+
+    function stopDrawing() {
+      if (isDrawing) {
+        isDrawing = false;
+        saveCanvasState();
+      }
+    }
+
+    function handleTouchStart(e) { e.preventDefault(); startDrawing(e); }
+    function handleTouchMove(e) { e.preventDefault(); drawMove(e); }
+
+    function setDraftingTool(tool) {
+      currentTool = tool;
+      document.querySelectorAll('.btn-atelier-tool').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`tool-${tool}`);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function setInkColor(hex, btn) {
+      currentStrokeColor = hex;
+      document.querySelectorAll('.ink-dot').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      if (currentTool === 'eraser') setDraftingTool('pencil');
+    }
+
+    function updateStrokeSize(val) {
+      currentStrokeWidth = parseInt(val, 10);
+      document.getElementById('stroke-val-badge').innerText = `${val}px`;
+    }
+
+    function saveCanvasState() {
+      if (undoStack.length >= 25) undoStack.shift();
+      undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+      redoStack = [];
+    }
+
+    function undoCanvasStroke() {
+      if (undoStack.length > 1) {
+        redoStack.push(undoStack.pop());
+        const previousState = undoStack[undoStack.length - 1];
+        ctx.putImageData(previousState, 0, 0);
+      }
+    }
+
+    function redoCanvasStroke() {
+      if (redoStack.length > 0) {
+        const nextState = redoStack.pop();
+        undoStack.push(nextState);
+        ctx.putImageData(nextState, 0, 0);
+      }
+    }
+
+    function clearCanvasAll() {
+      if (!confirm('Clear canvas blueprint?')) return;
+      ctx.fillStyle = '#fbf9f5';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      saveCanvasState();
+    }
+
+    function drawBlueprintGrid() {
+      if (!gridCtx) return;
+      gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
+      if (!showGrid) return;
+      gridCtx.strokeStyle = 'rgba(197, 168, 128, 0.35)';
+      gridCtx.lineWidth = 1;
+      const step = 32;
+      for (let x = 0; x <= gridCanvas.width; x += step) {
+        gridCtx.beginPath();
+        gridCtx.moveTo(x, 0);
+        gridCtx.lineTo(x, gridCanvas.height);
+        gridCtx.stroke();
+      }
+      for (let y = 0; y <= gridCanvas.height; y += step) {
+        gridCtx.beginPath();
+        gridCtx.moveTo(0, y);
+        gridCtx.lineTo(gridCanvas.width, y);
+        gridCtx.stroke();
+      }
+    }
+
+    function toggleBlueprintGrid() {
+      showGrid = !showGrid;
+      drawBlueprintGrid();
+      document.getElementById('btn-grid-toggle').classList.toggle('active', showGrid);
+    }
+
+    function downloadCurrentSketch() {
+      const link = document.createElement('a');
+      link.download = `sketch_${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('Sketch blueprint downloaded');
+    }
+
+    function handleCustomSketchUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const img = new Image();
+        img.onload = () => {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          const ratio = Math.min(canvas.width / img.width, canvas.height / img.height);
+          const nw = Math.floor(img.width * ratio);
+          const nh = Math.floor(img.height * ratio);
+          const ox = Math.floor((canvas.width - nw) / 2);
+          const oy = Math.floor((canvas.height - nh) / 2);
+          ctx.drawImage(img, ox, oy, nw, nh);
+          saveCanvasState();
+          showToast('Custom sketch blueprint loaded (aspect-ratio preserved)');
+          previewConditioningLinework();
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function previewConditioningLinework() {
+      try {
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        const fd = new FormData();
+        fd.append('file', blob, 'preview_sketch.png');
+        const resp = await fetch('/api/preprocess-sketch', { method: 'POST', body: fd });
+        if (resp.ok) {
+          const resData = await resp.json();
+          AppState.currentConditioningUrl = resData.conditioning_url;
+          const condImg = document.getElementById('stage-conditioning-image');
+          if (condImg) condImg.src = resData.conditioning_url;
+        }
+      } catch (err) {
+        console.warn('Conditioning linework extraction:', err);
+      }
+    }
+
+    function loadRoomPresetInStudio(category) {
+      switchAppDestination('studio');
+      AppState.activeCategory = category;
+      const selectCat = document.getElementById('select-category');
+      if (selectCat) selectCat.value = category;
+
+      const presetMap = {
+        living_room: {
+          file: '/api/sketches/example/new_living_room_sketch.png',
+          prompt: 'photorealistic contemporary luxury living room interior, designer sofa, travertine coffee table, indoor plants, natural morning sunlight from floor-to-ceiling windows, architectural digest photography, high resolution, sharp focus, 8k'
+        },
+        bedroom: {
+          file: '/api/sketches/example/new_bedroom_sketch.png',
+          prompt: 'photorealistic modern master bedroom interior, luxury upholstered bed, bedside lamps, floor-to-ceiling windows, natural daylight, hardwood flooring, serene ambiance, 8k'
+        },
+        kitchen: {
+          file: '/api/sketches/example/new_kitchen_sketch.png',
+          prompt: 'photorealistic contemporary kitchen interior, marble waterfall island, brass fixtures, integrated cabinetry, warm recessed ceiling lights, high resolution, 8k'
+        },
+        office: {
+          file: '/api/sketches/example/new_office_sketch.png',
+          prompt: 'photorealistic executive workspace, walnut desk, ergonomic chair, architectural bookshelf, natural window illumination, minimalist interior, 8k'
+        },
+        bathroom: {
+          file: '/api/sketches/example/new_bathroom_sketch.png',
+          prompt: 'photorealistic luxury spa bathroom interior, freestanding stone tub, Calacatta marble wall tiles, frameless glass shower enclosure, brushed brass fixtures, 8k'
+        }
+      };
+
+      const preset = presetMap[category] || presetMap.living_room;
+      document.getElementById('input-prompt').value = preset.prompt;
+
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        if (ctx) {
+          ctx.fillStyle = '#fbf9f5';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          saveCanvasState();
+        }
+        AppState.currentSketchUrl = preset.file;
+        showToast(`Loaded ${category.replace('_', ' ')} layout preset`);
+      };
+      img.src = preset.file;
+    }
+
+    function handleCategoryChange(cat) {
+      loadRoomPresetInStudio(cat);
+    }
+
+    /* ==========================================================================
+       SYNTHESIS PIPELINE & GENERATION REQUEST
+       ========================================================================== */
+    let synthesisTimerInterval = null;
+    let synthesisStartTime = 0;
+
+    async function executeStudioSynthesis() {
+      const btn = document.getElementById('btn-synthesize-master');
+      const overlay = document.getElementById('stage-loading-overlay');
+      const timerBadge = document.getElementById('loading-timer-badge');
+      const stepText = document.getElementById('loading-step-text');
+
+      btn.disabled = true;
+      overlay.style.display = 'flex';
+      synthesisStartTime = Date.now();
+
+      synthesisTimerInterval = setInterval(() => {
+        const elapsed = ((Date.now() - synthesisStartTime) / 1000).toFixed(1);
+        timerBadge.innerText = `${elapsed} s`;
+      }, 100);
+
+      stepText.innerText = 'Extracting architectural contours...';
+
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+      const formData = new FormData();
+      formData.append('file', blob, 'blueprint_sketch.png');
+
+      const model = document.getElementById('select-model').value;
+      const category = document.getElementById('select-category').value;
+      const prompt = document.getElementById('input-prompt').value;
+      const seedInput = document.getElementById('input-seed');
+      const seedVal = seedInput ? seedInput.value : '-1';
+      const condScaleSelect = document.getElementById('select-conditioning-scale');
+      const condScale = condScaleSelect ? condScaleSelect.value : '1.15';
+
+      const queryParams = new URLSearchParams({
+        model: model,
+        category: category,
+        steps: '18',
+        prompt: prompt,
+        seed: seedVal,
+        conditioning_scale: condScale
+      });
+
+      setTimeout(() => { stepText.innerText = 'Extracting high-contrast architectural linework...'; }, 1200);
+      setTimeout(() => { stepText.innerText = 'Synthesizing material illumination & spatial depth...'; }, 4000);
+
+      try {
+        const response = await fetch(`/api/generate?${queryParams.toString()}`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.detail || 'Synthesis failed');
+        }
+
+        const data = await response.json();
+        clearInterval(synthesisTimerInterval);
+        overlay.style.display = 'none';
+        btn.disabled = false;
+
+        AppState.currentGenerationId = data.generation_id || `gen_${Date.now()}`;
+        AppState.currentGeneratedUrl = data.generated_url;
+        AppState.currentSketchUrl = data.sketch_url || canvas.toDataURL('image/png');
+        AppState.currentConditioningUrl = data.conditioning_url || null;
+        AppState.currentDepthUrl = data.depth_url || `/api/depth/${data.generated_filename}`;
+        AppState.currentSceneUrl = data.scene_url || `/api/scene-objects/${data.generated_filename}?gen_id=${AppState.currentGenerationId}`;
+        AppState.activeCategory = data.category || category || AppState.activeCategory;
+        AppState.currentSeedUsed = data.seed_used;
+
+        displaySynthesizedResult();
+        showToast(`Synthesized with ${data.seed_used ? 'Seed ' + data.seed_used : 'adaptive linework'}!`);
+
+        // Reconstruct and update 3D Walkthrough using the latest generation ID
+        initOrUpdateRebuilt3DScene(AppState.currentGeneratedUrl, AppState.currentDepthUrl, AppState.currentGenerationId, AppState.activeCategory);
+
+      } catch (err) {
+        clearInterval(synthesisTimerInterval);
+        overlay.style.display = 'none';
+        btn.disabled = false;
+        alert(`Synthesis error: ${err.message}`);
+      }
+    }
+
+    function displaySynthesizedResult() {
+      document.getElementById('viewport-empty-hud').style.display = 'none';
+      const singleImg = document.getElementById('stage-single-image');
+      singleImg.src = AppState.currentGeneratedUrl;
+      singleImg.style.display = 'block';
+
+      // Setup Conditioning Linework source
+      const condImg = document.getElementById('stage-conditioning-image');
+      if (condImg && AppState.currentConditioningUrl) {
+        condImg.src = AppState.currentConditioningUrl;
+      }
+
+      // Setup Before/After sources
+      const bottomImg = document.getElementById('compare-bottom-img');
+      const topImg = document.getElementById('compare-top-img');
+      bottomImg.src = AppState.currentGeneratedUrl;
+      topImg.src = canvas.toDataURL('image/png');
+
+      // Setup Side-by-Side sources
+      document.getElementById('sbs-render-img').src = AppState.currentGeneratedUrl;
+      document.getElementById('sbs-sketch-img').src = canvas.toDataURL('image/png');
+
+      document.getElementById('stage-sketch-image').src = canvas.toDataURL('image/png');
+      switchViewportMode('render');
+    }
+
+    /* ==========================================================================
+       BEFORE/AFTER COMPARISON WITH CLIP-PATH & SIDE-BY-SIDE
+       ========================================================================== */
+    let isCompareDragging = false;
+
+    function switchViewportMode(mode) {
+      AppState.viewportMode = mode;
+      document.querySelectorAll('.viewport-mode-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`tab-mode-${mode}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const singleImg = document.getElementById('stage-single-image');
+      const compareSlider = document.getElementById('stage-compare-slider');
+      const sideBySide = document.getElementById('stage-side-by-side');
+      const sketchImg = document.getElementById('stage-sketch-image');
+      const condImg = document.getElementById('stage-conditioning-image');
+      const toggleModeBtn = document.getElementById('btn-toggle-compare-mode');
+
+      singleImg.style.display = 'none';
+      compareSlider.style.display = 'none';
+      sideBySide.style.display = 'none';
+      sketchImg.style.display = 'none';
+      if (condImg) condImg.style.display = 'none';
+      toggleModeBtn.style.display = 'none';
+
+      if (mode === 'render') {
+        singleImg.style.display = 'block';
+      } else if (mode === 'compare') {
+        toggleModeBtn.style.display = 'flex';
+        if (AppState.compareLayout === 'slider') {
+          compareSlider.style.display = 'block';
+          initCompareSliderListeners();
+        } else {
+          sideBySide.style.display = 'grid';
+        }
+      } else if (mode === 'sketch') {
+        sketchImg.style.display = 'block';
+      } else if (mode === 'conditioning') {
+        if (condImg) {
+          condImg.style.display = 'block';
+          if (!condImg.src && AppState.currentConditioningUrl) {
+            condImg.src = AppState.currentConditioningUrl;
+          }
+        }
+      }
+    }
+
+    function toggleCompareModeLayout() {
+      AppState.compareLayout = (AppState.compareLayout === 'slider') ? 'side-by-side' : 'slider';
+      document.getElementById('compare-layout-mode-label').innerText =
+        (AppState.compareLayout === 'slider') ? 'Side-by-Side View' : 'Reveal Slider View';
+      switchViewportMode('compare');
+    }
+
+    function initCompareSliderListeners() {
+      const stage = document.getElementById('viewport-stage-box');
+      if (!stage) return;
+
+      const handleMove = (clientX) => {
+        const rect = stage.getBoundingClientRect();
+        let posX = clientX - rect.left;
+        posX = Math.max(0, Math.min(rect.width, posX));
+        const percent = (posX / rect.width) * 100;
+        AppState.compareSplitPercent = percent;
+
+        const topImg = document.getElementById('compare-top-img');
+        const handle = document.getElementById('compare-divider-handle');
+        topImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+        handle.style.left = `${percent}%`;
+      };
+
+      stage.onpointerdown = (e) => {
+        isCompareDragging = true;
+        handleMove(e.clientX);
+      };
+      window.onpointermove = (e) => {
+        if (isCompareDragging) handleMove(e.clientX);
+      };
+      window.onpointerup = () => { isCompareDragging = false; };
+    }
+
+    function downloadGeneratedInterior() {
+      if (!AppState.currentGeneratedUrl) return;
+      const a = document.createElement('a');
+      a.href = AppState.currentGeneratedUrl;
+      a.download = `interior_${Date.now()}.png`;
+      a.click();
+      showToast('Interior render downloaded');
+    }
+
+    /* ==========================================================================
+       PART 7 & 8: REBUILT 3D SPATIAL ENGINE & OBJECT-AWARE ARCHITECTURAL VIEWER
+       Full enclosing room envelope, procedural furniture, windows, doors, plants,
+       ceiling fan rotation, mouse parallax, eye-level walkthrough, and orbit presets.
+       ========================================================================== */
+    let spatialScene, spatialCamera, spatialRenderer;
+    let depthPlaneMesh = null;
+    let roomShellGroup = null;
+    let animatedFanBlades = null;
+    let ceilingMesh = null;
+    let isCeilingCutaway = false;
+    let isInspectorOpen = false;
+    let isSpatialInitialized = false;
+    let isAutoOrbiting = false;
+    let orbitDistance = 5.2;
+
+    // Camera navigation state
+    let cameraYaw = 0;
+    let cameraPitch = 0;
+    let is3DDragging = false;
+    let is3DRightDragging = false;
+    let lastPointerX = 0, lastPointerY = 0;
+    let cameraLookTarget = new THREE.Vector3(0, 0, -1);
+    let currentSceneData = null;
+    let activeReconstructionRequestId = 0;
+
+    function toggleTechnicalInspector() {
+      isInspectorOpen = !isInspectorOpen;
+      const panel = document.getElementById('spatial-inventory-panel');
+      if (panel) panel.style.display = isInspectorOpen ? 'block' : 'none';
+    }
+
+    function renderTechnicalInspector(sceneData) {
+      if (!sceneData) return;
+      const chip = document.getElementById('hud-chip-inspect');
+      const objects = sceneData.objects || [];
+      if (chip) chip.innerText = `\u2630 Object Inventory (${objects.length})`;
+
+      const summary = document.getElementById('inspector-summary-stats');
+      if (summary) {
+        const qm = sceneData.quality_metrics || {};
+        summary.innerHTML = `
+          <div><strong>Generation ID:</strong> ${sceneData.generation_id || 'active'}</div>
+          <div><strong>Category:</strong> ${sceneData.category || 'living_room'} &bull; <strong>Coverage:</strong> ${(qm.coverage_score ? (qm.coverage_score * 100).toFixed(0) : 98)}%</div>
+          <div><strong>Fidelity:</strong> ${qm.reconstruction_fidelity || 'Hybrid 2.5D + Procedural 3D'}</div>
+        `;
+      }
+
+      const list = document.getElementById('inspector-object-list');
+      if (list) {
+        list.innerHTML = objects.map((obj, i) => `
+          <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 8px 10px; font-size: 0.76rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <span style="font-weight: 600; color: var(--warm-ivory);">${i+1}. ${obj.label || obj.id}</span>
+              <span style="font-family: monospace; color: var(--accent-gold); font-size: 0.70rem;">${(obj.confidence * 100).toFixed(0)}% conf</span>
+            </div>
+            <div style="color: var(--text-muted); font-size: 0.70rem; display: flex; gap: 8px; flex-wrap: wrap;">
+              <span>Pos: [${obj.position.map(n => n.toFixed(1)).join(', ')}]</span>
+              <span>Dim: [${obj.dimensions.map(n => n.toFixed(1)).join(', ')}]</span>
+              <span>Mode: <em style="color: ${obj.reconstruction_mode === 'hybrid_2.5d' ? '#9ec5fe' : '#a3cfbb'};">${obj.reconstruction_mode || '3D'}</em></span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function toggleCeilingCutaway() {
+      isCeilingCutaway = !isCeilingCutaway;
+      if (ceilingMesh) ceilingMesh.visible = !isCeilingCutaway;
+      const btn = document.getElementById('cam-preset-cutaway');
+      if (btn) {
+        btn.innerText = `Ceiling: ${isCeilingCutaway ? 'Cutaway' : 'Enclosed'}`;
+        btn.classList.toggle('active', isCeilingCutaway);
+      }
+    }
+
+    function disposeThreeObject(obj) {
+      if (!obj) return;
+      obj.traverse(child => {
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) {
+          if (Array.isArray(child.material)) {
+            child.material.forEach(m => {
+              if (m.map) m.map.dispose();
+              if (m.displacementMap) m.displacementMap.dispose();
+              m.dispose();
+            });
+          } else {
+            if (child.material.map) child.material.map.dispose();
+            if (child.material.displacementMap) child.material.displacementMap.dispose();
+            child.material.dispose();
+          }
+        }
+      });
+    }
+
+    function setReconstructionStatus(visible, stepTitle, stepDetail, genId) {
+      const hud = document.getElementById('spatial-reconstruction-hud');
+      if (!hud) return;
+      hud.style.display = visible ? 'flex' : 'none';
+      if (visible) {
+        if (stepTitle) document.getElementById('recon-step-title').innerText = stepTitle;
+        if (stepDetail) document.getElementById('recon-step-detail').innerText = stepDetail;
+        if (genId) document.getElementById('recon-step-gen-id').innerText = `ID: ${genId}`;
+      }
+    }
+
+    function initOrUpdateRebuilt3DScene(diffuseUrl, depthUrl, generationId, category) {
+      const container = document.getElementById('three-spatial-canvas-container');
+      if (!container) return;
+
+      const cWidth = container.clientWidth || 1100;
+      const cHeight = container.clientHeight || 600;
+
+      if (!isSpatialInitialized) {
+        spatialScene = new THREE.Scene();
+        spatialScene.background = new THREE.Color(0x0e0d0b);
+
+        spatialCamera = new THREE.PerspectiveCamera(52, cWidth / cHeight, 0.1, 100);
+        spatialCamera.position.set(0, 0, 3.8);
+
+        spatialRenderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+        spatialRenderer.setSize(cWidth, cHeight);
+        spatialRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        spatialRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+        spatialRenderer.toneMappingExposure = 1.08;
+        spatialRenderer.shadowMap.enabled = true;
+        spatialRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(spatialRenderer.domElement);
+
+        // Warm Architectural Lighting System
+        const ambLight = new THREE.AmbientLight(0xfcf8f2, 1.1);
+        spatialScene.add(ambLight);
+
+        const warmKey = new THREE.DirectionalLight(0xffeedd, 0.95);
+        warmKey.position.set(4, 5.5, 3.5);
+        warmKey.castShadow = true;
+        warmKey.shadow.mapSize.width = 1024;
+        warmKey.shadow.mapSize.height = 1024;
+        spatialScene.add(warmKey);
+
+        const ceilingDownlight = new THREE.PointLight(0xffeedb, 0.85, 12, 1.8);
+        ceilingDownlight.position.set(0, 2.2, -1.0);
+        spatialScene.add(ceilingDownlight);
+
+        // Mouse Drag & Orbit Listeners
+        container.addEventListener('pointerdown', (e) => {
+          if (e.button === 2) {
+            is3DRightDragging = true;
+          } else {
+            is3DDragging = true;
+          }
+          lastPointerX = e.clientX;
+          lastPointerY = e.clientY;
+          if (isAutoOrbiting) toggleAutoOrbit(); // Stop auto-orbit on manual interaction
+        });
+
+        window.addEventListener('pointermove', (e) => {
+          if (!is3DDragging && !is3DRightDragging) return;
+          const deltaX = e.clientX - lastPointerX;
+          const deltaY = e.clientY - lastPointerY;
+          lastPointerX = e.clientX;
+          lastPointerY = e.clientY;
+
+          if (AppState.active3DMode === 1) {
+            // Mode 1: Subtle cinematic parallax
+            spatialCamera.position.x += deltaX * 0.0025;
+            spatialCamera.position.y -= deltaY * 0.0025;
+            spatialCamera.position.x = Math.max(-0.9, Math.min(0.9, spatialCamera.position.x));
+            spatialCamera.position.y = Math.max(-0.6, Math.min(0.6, spatialCamera.position.y));
+            spatialCamera.lookAt(0, 0, -1);
+          } else if (AppState.active3DMode === 2) {
+            // Mode 2: First-person eye-level mouse look
+            cameraYaw -= deltaX * 0.0032;
+            cameraPitch -= deltaY * 0.0025;
+            cameraPitch = Math.max(-0.75, Math.min(0.75, cameraPitch));
+            spatialCamera.rotation.order = 'YXZ';
+            spatialCamera.rotation.y = cameraYaw;
+            spatialCamera.rotation.x = cameraPitch;
+          } else if (AppState.active3DMode === 3) {
+            // Mode 3: Architectural Orbit
+            if (is3DRightDragging) {
+              // Pan
+              cameraLookTarget.x -= deltaX * 0.005;
+              cameraLookTarget.y += deltaY * 0.005;
+            } else {
+              // Orbit Rotate
+              cameraYaw -= deltaX * 0.0055;
+              cameraPitch += deltaY * 0.0040;
+              cameraPitch = Math.max(-0.35, Math.min(1.35, cameraPitch));
+            }
+            updateOrbitCameraPosition();
+          }
+        });
+
+        window.addEventListener('pointerup', () => {
+          is3DDragging = false;
+          is3DRightDragging = false;
+        });
+
+        // Mouse Wheel Zoom Listener
+        container.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          if (AppState.active3DMode === 3) {
+            orbitDistance = Math.max(2.2, Math.min(8.5, orbitDistance + e.deltaY * 0.005));
+            updateOrbitCameraPosition();
+          } else if (AppState.active3DMode === 2) {
+            const zoomSpeed = e.deltaY * -0.003;
+            spatialCamera.translateZ(-zoomSpeed);
+            clampWalkthroughCamera();
+          }
+        }, { passive: false });
+
+        container.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        // WASD & Arrow Keyboard Listeners
+        window.addEventListener('keydown', (e) => {
+          const k = e.key.toLowerCase();
+          if (['w', 'a', 's', 'd'].includes(k)) AppState.cameraKeyMove[k] = true;
+          if (k === 'arrowup') AppState.cameraKeyMove['w'] = true;
+          if (k === 'arrowdown') AppState.cameraKeyMove['s'] = true;
+          if (k === 'arrowleft') AppState.cameraKeyMove['a'] = true;
+          if (k === 'arrowright') AppState.cameraKeyMove['d'] = true;
+        });
+        window.addEventListener('keyup', (e) => {
+          const k = e.key.toLowerCase();
+          if (['w', 'a', 's', 'd'].includes(k)) AppState.cameraKeyMove[k] = false;
+          if (k === 'arrowup') AppState.cameraKeyMove['w'] = false;
+          if (k === 'arrowdown') AppState.cameraKeyMove['s'] = false;
+          if (k === 'arrowleft') AppState.cameraKeyMove['a'] = false;
+          if (k === 'arrowright') AppState.cameraKeyMove['d'] = false;
+        });
+
+        window.addEventListener('resize', () => {
+          if (!spatialCamera || !spatialRenderer) return;
+          spatialCamera.aspect = container.clientWidth / container.clientHeight;
+          spatialCamera.updateProjectionMatrix();
+          spatialRenderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        isSpatialInitialized = true;
+        animateSpatialScene();
+      }
+
+      const effectiveGenId = generationId || AppState.currentGenerationId || `gen_${Date.now()}`;
+      const effectiveCat = category || AppState.activeCategory || 'living_room';
+      const chipGen = document.getElementById('hud-chip-gen-id');
+      if (chipGen) chipGen.innerText = `Gen: ${effectiveGenId}`;
+
+      const thisRequestId = ++activeReconstructionRequestId;
+      setReconstructionStatus(true, 'Loading Generated Interior', 'Extracting image-derived spatial data...', effectiveGenId);
+
+      // Fetch semantic scene descriptor for object-aware reconstruction
+      const filename = diffuseUrl.split('/').pop().split('?')[0];
+      setReconstructionStatus(true, 'Segmenting Architectural Objects', 'Identifying furniture, lighting, and materials...', effectiveGenId);
+
+      fetch(`/api/scene-objects/${filename}?gen_id=${effectiveGenId}&category=${effectiveCat}`)
+        .then(r => r.ok ? r.json() : null)
+        .then(sceneData => {
+          if (thisRequestId !== activeReconstructionRequestId) return; // Discard stale job
+          if (sceneData) {
+            currentSceneData = sceneData;
+            renderTechnicalInspector(sceneData);
+            setReconstructionStatus(true, 'Building Spatial Geometry', 'Generating 3D room shell and detected objects...', effectiveGenId);
+            buildReconstructedArchitecturalRoom(sceneData, diffuseUrl);
+          }
+        })
+        .catch(err => {
+          console.warn('Could not load scene objects:', err);
+        });
+
+      // Load Subdivided Depth Mesh with Cache-Buster
+      setReconstructionStatus(true, 'Estimating Surface Depth', 'Mapping perspective depth grid...', effectiveGenId);
+      const cacheBust = `?v=${effectiveGenId}`;
+      const textureLoader = new THREE.TextureLoader();
+
+      textureLoader.load(diffuseUrl + cacheBust, (diffuseTex) => {
+        textureLoader.load(depthUrl + cacheBust, (depthTex) => {
+          if (thisRequestId !== activeReconstructionRequestId) return; // Discard stale job
+
+          if (depthPlaneMesh) {
+            spatialScene.remove(depthPlaneMesh);
+            disposeThreeObject(depthPlaneMesh);
+            depthPlaneMesh = null;
+          }
+
+          const geom = new THREE.PlaneGeometry(7.2, 7.2, 180, 180);
+          const mat = new THREE.MeshStandardMaterial({
+            map: diffuseTex,
+            displacementMap: depthTex,
+            displacementScale: 0.62,
+            roughness: 0.50,
+            metalness: 0.05,
+            side: THREE.DoubleSide
+          });
+
+          depthPlaneMesh = new THREE.Mesh(geom, mat);
+          depthPlaneMesh.position.set(0, 0, -1.2);
+          spatialScene.add(depthPlaneMesh);
+
+          // Update visibility according to active mode
+          depthPlaneMesh.visible = (AppState.active3DMode === 1);
+          setReconstructionStatus(false);
+        });
+      }, undefined, (err) => {
+        console.error('Error loading diffuse texture:', err);
+        setReconstructionStatus(false);
+      });
+    }
+
+    function updateOrbitCameraPosition() {
+      if (!spatialCamera) return;
+      spatialCamera.position.x = cameraLookTarget.x + orbitDistance * Math.sin(cameraYaw) * Math.cos(cameraPitch);
+      spatialCamera.position.y = cameraLookTarget.y + orbitDistance * Math.sin(cameraPitch);
+      spatialCamera.position.z = cameraLookTarget.z + orbitDistance * Math.cos(cameraYaw) * Math.cos(cameraPitch);
+      spatialCamera.lookAt(cameraLookTarget);
+    }
+
+    function clampWalkthroughCamera() {
+      if (!spatialCamera) return;
+      spatialCamera.position.x = Math.max(-3.0, Math.min(3.0, spatialCamera.position.x));
+      spatialCamera.position.y = Math.max(-0.4, Math.min(0.8, spatialCamera.position.y));
+      spatialCamera.position.z = Math.max(-3.0, Math.min(3.2, spatialCamera.position.z));
+    }
+
+    function toggleAutoOrbit() {
+      isAutoOrbiting = !isAutoOrbiting;
+      const btn = document.getElementById('cam-preset-auto-orbit');
+      if (btn) {
+        btn.innerText = `Auto-Orbit: ${isAutoOrbiting ? 'On' : 'Off'}`;
+        btn.classList.toggle('active', isAutoOrbiting);
+      }
+    }
+
+    /* ==========================================================================
+       BUILD RECONSTRUCTED 3D ARCHITECTURAL ROOM & DETECTED OBJECTS
+       ========================================================================== */
+    function buildReconstructedArchitecturalRoom(sceneData, diffuseUrl) {
+      if (roomShellGroup) {
+        spatialScene.remove(roomShellGroup);
+        disposeThreeObject(roomShellGroup);
+        roomShellGroup = null;
+      }
+      roomShellGroup = new THREE.Group();
+      animatedFanBlades = null;
+
+      const materials = sceneData ? sceneData.materials : {};
+      const floorColor = new THREE.Color(materials.floor_color || '#42281a');
+      const ceilingColor = new THREE.Color(materials.ceiling_color || '#5a493e');
+      const wallColor = new THREE.Color(materials.wall_color || '#9c958d');
+      const leftWallColor = new THREE.Color(materials.left_wall_color || '#78685c');
+      const rightWallColor = new THREE.Color(materials.right_wall_color || materials.left_wall_color || '#78685c');
+
+      // 1. Fully Enclosed Architectural Room Envelope (Zero Black Holes)
+      // Floor (Wood Planks / Travertine)
+      const floorGeom = new THREE.PlaneGeometry(8.2, 8.2);
+      const floorMat = new THREE.MeshStandardMaterial({
+        color: floorColor,
+        roughness: 0.35,
+        metalness: 0.08
+      });
+      const floor = new THREE.Mesh(floorGeom, floorMat);
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.set(0, -1.8, 0);
+      floor.receiveShadow = true;
+      roomShellGroup.add(floor);
+
+      // Ceiling (Warm Slatted Finish) with Ceiling Cutaway Support
+      const ceilingGeom = new THREE.PlaneGeometry(8.2, 8.2);
+      const ceilingMat = new THREE.MeshStandardMaterial({
+        color: ceilingColor,
+        roughness: 0.70
+      });
+      const ceiling = new THREE.Mesh(ceilingGeom, ceilingMat);
+      ceiling.rotation.x = Math.PI / 2;
+      ceiling.position.set(0, 2.4, 0);
+      ceilingMesh = ceiling;
+      ceilingMesh.visible = !isCeilingCutaway;
+      roomShellGroup.add(ceiling);
+
+      // Back Wall
+      const backWallGeom = new THREE.PlaneGeometry(8.2, 4.2);
+      const backWallMat = new THREE.MeshStandardMaterial({
+        color: wallColor,
+        roughness: 0.85
+      });
+      const backWall = new THREE.Mesh(backWallGeom, backWallMat);
+      backWall.position.set(0, 0.3, -4.1);
+      roomShellGroup.add(backWall);
+
+      // Left Wall
+      const leftWallGeom = new THREE.PlaneGeometry(8.2, 4.2);
+      const leftWallMat = new THREE.MeshStandardMaterial({
+        color: leftWallColor,
+        roughness: 0.80
+      });
+      const leftWall = new THREE.Mesh(leftWallGeom, leftWallMat);
+      leftWall.rotation.y = Math.PI / 2;
+      leftWall.position.set(-4.1, 0.3, 0);
+      roomShellGroup.add(leftWall);
+
+      // Right Wall
+      const rightWall = new THREE.Mesh(leftWallGeom, leftWallMat);
+      rightWall.rotation.y = -Math.PI / 2;
+      rightWall.position.set(4.1, 0.3, 0);
+      roomShellGroup.add(rightWall);
+
+      // Architectural Baseboards (Perimeter Molding)
+      const baseboardMat = new THREE.MeshStandardMaterial({ color: 0x1f1b17, roughness: 0.5 });
+      const bbBack = new THREE.Mesh(new THREE.BoxGeometry(8.2, 0.14, 0.08), baseboardMat);
+      bbBack.position.set(0, -1.73, -4.06);
+      roomShellGroup.add(bbBack);
+      const bbLeft = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.14, 8.2), baseboardMat);
+      bbLeft.position.set(-4.06, -1.73, 0);
+      roomShellGroup.add(bbLeft);
+      const bbRight = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.14, 8.2), baseboardMat);
+      bbRight.position.set(4.06, -1.73, 0);
+      roomShellGroup.add(bbRight);
+
+      const texLoader = new THREE.TextureLoader();
+
+      // 2. Procedural & Hybrid Reconstructed 3D Scene Objects
+      const objects = (sceneData && sceneData.objects) ? sceneData.objects : [];
+      objects.forEach(obj => {
+        const cat = obj.category;
+        const pos = obj.position || [0, 0, 0];
+        const dims = obj.dimensions || [1, 1, 1];
+        const objColor = new THREE.Color(obj.color || '#8c8072');
+
+        if (cat === 'ceiling_fan') {
+          // Multi-Part Ceiling Fan (Canopy + Downrod + Motor + 4 Angled Blades)
+          const fanGroup = new THREE.Group();
+          fanGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const canopy = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.08, 16), new THREE.MeshStandardMaterial({ color: 0x1c1c1c, roughness: 0.3 }));
+          canopy.position.y = 0.28;
+          fanGroup.add(canopy);
+
+          const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.35, 12), new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.8, roughness: 0.2 }));
+          rod.position.y = 0.12;
+          fanGroup.add(rod);
+
+          const motor = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.15, 20), new THREE.MeshStandardMaterial({ color: 0x1e1e1e, metalness: 0.6, roughness: 0.3 }));
+          motor.position.y = -0.06;
+          fanGroup.add(motor);
+
+          const bladesGroup = new THREE.Group();
+          bladesGroup.position.y = -0.06;
+          const bladeMat = new THREE.MeshStandardMaterial({ color: 0x24201c, roughness: 0.4 });
+          for (let i = 0; i < 4; i++) {
+            const angle = (i * Math.PI) / 2;
+            const blade = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.02, 0.18), bladeMat);
+            blade.position.set(Math.cos(angle) * 0.52, 0, Math.sin(angle) * 0.52);
+            blade.rotation.y = -angle;
+            blade.rotation.x = 0.12;
+            bladesGroup.add(blade);
+          }
+          fanGroup.add(bladesGroup);
+          animatedFanBlades = bladesGroup;
+          roomShellGroup.add(fanGroup);
+
+        } else if (cat === 'window') {
+          // Architectural Window (Beveled Frame + Cross Mullion + Translucent Glass)
+          const winGroup = new THREE.Group();
+          winGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const isSideWall = Math.abs(pos[0]) > 2.5;
+          const frameMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(obj.frame_color || '#2c2621'), roughness: 0.45 });
+          
+          let frameGeom, glassGeom, sillGeom;
+          if (isSideWall) {
+            frameGeom = new THREE.BoxGeometry(dims[0] || 0.14, dims[1], dims[2]);
+            glassGeom = new THREE.BoxGeometry((dims[0] || 0.14) * 0.5, dims[1] * 0.94, dims[2] * 0.92);
+            sillGeom = new THREE.BoxGeometry((dims[0] || 0.14) * 1.8, 0.08, dims[2] * 1.08);
+          } else {
+            frameGeom = new THREE.BoxGeometry(dims[0], dims[1], dims[2] || 0.14);
+            glassGeom = new THREE.BoxGeometry(dims[0] * 0.92, dims[1] * 0.94, (dims[2] || 0.14) * 0.5);
+            sillGeom = new THREE.BoxGeometry(dims[0] * 1.08, 0.08, (dims[2] || 0.14) * 1.8);
+          }
+
+          const frame = new THREE.Mesh(frameGeom, frameMat);
+          winGroup.add(frame);
+
+          const glassMat = new THREE.MeshPhysicalMaterial({
+            color: new THREE.Color(obj.color || '#e8f0f8'),
+            roughness: 0.08,
+            transmission: 0.75,
+            transparent: true,
+            opacity: 0.70
+          });
+          const glass = new THREE.Mesh(glassGeom, glassMat);
+          winGroup.add(glass);
+
+          // Window Sill
+          const sill = new THREE.Mesh(sillGeom, frameMat);
+          sill.position.y = -dims[1] * 0.5 - 0.04;
+          winGroup.add(sill);
+
+          roomShellGroup.add(winGroup);
+
+        } else if (cat === 'curtains') {
+          // Pleated Linen Drapery along Window
+          const curGroup = new THREE.Group();
+          curGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const isSide = Math.abs(pos[0]) > 2.5;
+          // Curtain Rod
+          const rodMat = new THREE.MeshStandardMaterial({ color: 0x1f1b18, metalness: 0.85, roughness: 0.25 });
+          const rodLength = isSide ? dims[2] * 1.15 : dims[0] * 1.15;
+          const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, rodLength, 12), rodMat);
+          if (isSide) {
+            rod.rotation.x = Math.PI / 2;
+          } else {
+            rod.rotation.z = Math.PI / 2;
+          }
+          rod.position.y = dims[1] * 0.5 + 0.06;
+          curGroup.add(rod);
+
+          // Drapery Fabric (Hybrid Cutout or Procedural Pleats)
+          if (obj.cutout_url) {
+            const curtainGeom = isSide ? new THREE.PlaneGeometry(dims[2], dims[1], 12, 1) : new THREE.PlaneGeometry(dims[0], dims[1], 12, 1);
+            texLoader.load(obj.cutout_url, (cTex) => {
+              cTex.wrapS = THREE.ClampToEdgeWrapping;
+              cTex.wrapT = THREE.ClampToEdgeWrapping;
+              const curMat = new THREE.MeshStandardMaterial({
+                map: cTex,
+                roughness: 0.85,
+                side: THREE.DoubleSide,
+                transparent: true
+              });
+              const curtainMesh = new THREE.Mesh(curtainGeom, curMat);
+              if (isSide) {
+                curtainMesh.rotation.y = (pos[0] < 0) ? Math.PI / 2 : -Math.PI / 2;
+              }
+              curGroup.add(curtainMesh);
+            });
+          } else {
+            // Procedural Pleated Drapery Columns
+            const draperyMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.88, side: THREE.DoubleSide });
+            const pleatCount = 6;
+            const pleatW = (isSide ? dims[2] : dims[0]) / pleatCount;
+            for (let p = 0; p < pleatCount; p++) {
+              const pleatMesh = new THREE.Mesh(new THREE.CylinderGeometry(pleatW * 0.32, pleatW * 0.35, dims[1], 12), draperyMat);
+              const offset = -((isSide ? dims[2] : dims[0]) / 2) + p * pleatW + pleatW / 2;
+              if (isSide) {
+                pleatMesh.position.set(0, 0, offset);
+              } else {
+                pleatMesh.position.set(offset, 0, 0);
+              }
+              curGroup.add(pleatMesh);
+            }
+          }
+          roomShellGroup.add(curGroup);
+
+        } else if (cat === 'floor_lamp') {
+          // Slender Architectural Floor Lamp with Interior Light
+          const lampGroup = new THREE.Group();
+          lampGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const brassMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(obj.pole_color || '#c8a462'), metalness: 0.88, roughness: 0.22 });
+          const base = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.22, 0.04, 20), brassMat);
+          base.position.y = -dims[1] * 0.5 + 0.02;
+          lampGroup.add(base);
+
+          const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, dims[1] * 0.88, 12), brassMat);
+          stem.position.y = -dims[1] * 0.06;
+          lampGroup.add(stem);
+
+          const shadeH = dims[1] * 0.26;
+          const shadeMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.45, side: THREE.DoubleSide });
+          const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.24, shadeH, 20), shadeMat);
+          shade.position.y = dims[1] * 0.42;
+          lampGroup.add(shade);
+
+          // Warm Interior PointLight
+          const lampLight = new THREE.PointLight(0xffedd0, 1.4, 4.5);
+          lampLight.position.y = dims[1] * 0.42;
+          lampGroup.add(lampLight);
+
+          roomShellGroup.add(lampGroup);
+
+        } else if (cat === 'artwork') {
+          // Minimalist Framed Wall Canvas (Hybrid Cutout Texture)
+          const artGroup = new THREE.Group();
+          artGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const frameMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(obj.frame_color || '#1f1b17'), roughness: 0.5 });
+          const frame = new THREE.Mesh(new THREE.BoxGeometry(dims[0], dims[1], dims[2]), frameMat);
+          artGroup.add(frame);
+
+          const canvasGeom = new THREE.PlaneGeometry(dims[0] * 0.94, dims[1] * 0.92);
+          if (obj.cutout_url) {
+            texLoader.load(obj.cutout_url, (aTex) => {
+              const canvasMat = new THREE.MeshBasicMaterial({ map: aTex });
+              const canvas = new THREE.Mesh(canvasGeom, canvasMat);
+              canvas.position.z = dims[2] * 0.52;
+              artGroup.add(canvas);
+            });
+          } else {
+            const canvasMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.7 });
+            const canvas = new THREE.Mesh(canvasGeom, canvasMat);
+            canvas.position.z = dims[2] * 0.52;
+            artGroup.add(canvas);
+          }
+          roomShellGroup.add(artGroup);
+
+        } else if (cat === 'cove_light') {
+          // Architectural Linear Cove Lighting Strip
+          const coveGroup = new THREE.Group();
+          coveGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const stripMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(obj.color || '#fff0dd') });
+          const strip = new THREE.Mesh(new THREE.BoxGeometry(dims[0], dims[1], dims[2]), stripMat);
+          coveGroup.add(strip);
+
+          // Soft downward wash point light
+          const coveWash = new THREE.PointLight(0xffeacc, 1.2, 3.5);
+          coveWash.position.set(0, -0.2, 0.2);
+          coveGroup.add(coveWash);
+
+          roomShellGroup.add(coveGroup);
+
+        } else if (cat === 'sofa_main' || (cat === 'sofa' && !obj.is_chaise)) {
+          // Modular Sectional Luxury Sofa (Plinth + Deep Cushions + Structured Back + Arms)
+          const sofaGroup = new THREE.Group();
+          sofaGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const plinthMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(obj.plinth_color || '#241f1a'), roughness: 0.55 });
+          const plinthH = 0.12;
+          const plinth = new THREE.Mesh(new THREE.BoxGeometry(dims[0], plinthH, dims[2]), plinthMat);
+          plinth.position.y = -dims[1] * 0.5 + plinthH * 0.5;
+          sofaGroup.add(plinth);
+
+          const fabricMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.78 });
+          // Base Seat Cushion Platform
+          const seatH = dims[1] * 0.38;
+          const seat = new THREE.Mesh(new THREE.BoxGeometry(dims[0] * 0.98, seatH, dims[2] * 0.90), fabricMat);
+          seat.position.y = -dims[1] * 0.5 + plinthH + seatH * 0.5;
+          sofaGroup.add(seat);
+
+          // Deep Backrest
+          const backH = dims[1] * 0.58;
+          const backD = dims[2] * 0.26;
+          const backrest = new THREE.Mesh(new THREE.BoxGeometry(dims[0] * 0.98, backH, backD), fabricMat);
+          backrest.position.set(0, -dims[1] * 0.5 + plinthH + seatH + backH * 0.45 - dims[1] * 0.1, -dims[2] * 0.5 + backD * 0.5);
+          sofaGroup.add(backrest);
+
+          // Armrests
+          const armW = 0.24;
+          const armH = dims[1] * 0.55;
+          const armL = new THREE.Mesh(new THREE.BoxGeometry(armW, armH, dims[2]), fabricMat);
+          armL.position.set(-dims[0] * 0.5 + armW * 0.5, -dims[1] * 0.5 + plinthH + armH * 0.5, 0);
+          sofaGroup.add(armL);
+          const armR = new THREE.Mesh(new THREE.BoxGeometry(armW, armH, dims[2]), fabricMat);
+          armR.position.set(dims[0] * 0.5 - armW * 0.5, -dims[1] * 0.5 + plinthH + armH * 0.5, 0);
+          sofaGroup.add(armR);
+
+          roomShellGroup.add(sofaGroup);
+
+        } else if (cat === 'cushions') {
+          // Array of Plush Back Cushions & Accent Throw Pillows
+          const cushGroup = new THREE.Group();
+          cushGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const mainCushMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.85 });
+          const accentMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(obj.accent_color || '#dfd7cb'), roughness: 0.80 });
+
+          const cCount = 4;
+          const cW = (dims[0] * 0.88) / cCount;
+          for (let i = 0; i < cCount; i++) {
+            const posX = -dims[0] * 0.42 + i * cW + cW * 0.5;
+            const cushion = new THREE.Mesh(new THREE.BoxGeometry(cW * 0.92, dims[1], dims[2] * 0.85), (i % 2 === 0) ? mainCushMat : accentMat);
+            cushion.position.set(posX, 0, (Math.random() - 0.5) * 0.04);
+            cushion.rotation.y = (Math.random() - 0.5) * 0.12;
+            cushGroup.add(cushion);
+          }
+          // Angled Corner Throw Pillows
+          const pillowL = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.38, 0.14), accentMat);
+          pillowL.position.set(-dims[0] * 0.45, -0.05, 0.08);
+          pillowL.rotation.set(0.1, 0.35, -0.15);
+          cushGroup.add(pillowL);
+
+          const pillowR = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.38, 0.14), accentMat);
+          pillowR.position.set(dims[0] * 0.45, -0.05, 0.08);
+          pillowR.rotation.set(0.1, -0.35, 0.15);
+          cushGroup.add(pillowR);
+
+          roomShellGroup.add(cushGroup);
+
+        } else if (cat === 'sofa_chaise') {
+          // Forward Chaise Lounge / Ottoman Extension
+          const chaiseGroup = new THREE.Group();
+          chaiseGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const plinthMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(obj.plinth_color || '#382920'), roughness: 0.55 });
+          const plinth = new THREE.Mesh(new THREE.BoxGeometry(dims[0], 0.12, dims[2]), plinthMat);
+          plinth.position.y = -dims[1] * 0.5 + 0.06;
+          chaiseGroup.add(plinth);
+
+          const fabricMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.78 });
+          const seat = new THREE.Mesh(new THREE.BoxGeometry(dims[0] * 0.96, dims[1] * 0.82, dims[2] * 0.96), fabricMat);
+          seat.position.y = 0.04;
+          chaiseGroup.add(seat);
+
+          roomShellGroup.add(chaiseGroup);
+
+        } else if (cat === 'armchair') {
+          // Designer Curved Armchair
+          const chairGroup = new THREE.Group();
+          chairGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const shellMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(obj.shell_color || '#1c1815'), roughness: 0.5 });
+          const fabricMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.75 });
+
+          // Curved Back Shell
+          const backShell = new THREE.Mesh(new THREE.CylinderGeometry(dims[0] * 0.48, dims[0] * 0.44, dims[1] * 0.75, 20, 1, false, 0, Math.PI), shellMat);
+          backShell.position.set(0, dims[1] * 0.12, 0);
+          backShell.rotation.y = Math.PI / 2;
+          chairGroup.add(backShell);
+
+          // Seat Cushion
+          const seat = new THREE.Mesh(new THREE.CylinderGeometry(dims[0] * 0.44, dims[0] * 0.42, dims[1] * 0.32, 20), fabricMat);
+          seat.position.y = -dims[1] * 0.18;
+          chairGroup.add(seat);
+
+          // Angled Legs
+          const legMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.8, roughness: 0.3 });
+          const legH = dims[1] * 0.35;
+          [[-0.32, -0.32], [0.32, -0.32], [-0.32, 0.32], [0.32, 0.32]].forEach(lp => {
+            const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.015, legH, 10), legMat);
+            leg.position.set(lp[0] * dims[0], -dims[1] * 0.5 + legH * 0.5, lp[1] * dims[2]);
+            leg.rotation.z = lp[0] * 0.18;
+            leg.rotation.x = -lp[1] * 0.18;
+            chairGroup.add(leg);
+          });
+
+          roomShellGroup.add(chairGroup);
+
+        } else if (cat === 'accent_chair') {
+          // Dark Silhouette Accent Chair
+          const chairGroup = new THREE.Group();
+          chairGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const leatherMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.45 });
+          const metalMat = new THREE.MeshStandardMaterial({ color: 0x141414, metalness: 0.85, roughness: 0.25 });
+
+          const seat = new THREE.Mesh(new THREE.BoxGeometry(dims[0] * 0.85, 0.12, dims[2] * 0.85), leatherMat);
+          seat.position.y = -dims[1] * 0.12;
+          chairGroup.add(seat);
+
+          const back = new THREE.Mesh(new THREE.BoxGeometry(dims[0] * 0.85, dims[1] * 0.55, 0.10), leatherMat);
+          back.position.set(0, dims[1] * 0.18, -dims[2] * 0.38);
+          back.rotation.x = -0.15;
+          chairGroup.add(back);
+
+          const frameBase = new THREE.Mesh(new THREE.CylinderGeometry(dims[0] * 0.38, dims[0] * 0.42, dims[1] * 0.38, 16), metalMat);
+          frameBase.position.y = -dims[1] * 0.35;
+          chairGroup.add(frameBase);
+
+          roomShellGroup.add(chairGroup);
+
+        } else if (cat === 'coffee_table') {
+          // Sculptural Low Coffee Table (Plinth + Beveled Stone Top)
+          const ctGroup = new THREE.Group();
+          ctGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const plinthMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(obj.plinth_color || '#1f1b18'), roughness: 0.6 });
+          const plinth = new THREE.Mesh(new THREE.BoxGeometry(dims[0] * 0.82, dims[1] * 0.78, dims[2] * 0.82), plinthMat);
+          plinth.position.y = -dims[1] * 0.12;
+          ctGroup.add(plinth);
+
+          const topMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.30, metalness: 0.08 });
+          const top = new THREE.Mesh(new THREE.BoxGeometry(dims[0], 0.08, dims[2]), topMat);
+          top.position.y = dims[1] * 0.42;
+          ctGroup.add(top);
+
+          roomShellGroup.add(ctGroup);
+
+        } else if (cat === 'table_accessories') {
+          // Tabletop Centerpiece (Hybrid Cutout / Sculptural Tray & Bud Vase)
+          const accGroup = new THREE.Group();
+          accGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const trayMat = new THREE.MeshStandardMaterial({ color: 0x221c17, roughness: 0.4 });
+          const tray = new THREE.Mesh(new THREE.CylinderGeometry(dims[0] * 0.45, dims[0] * 0.48, 0.03, 20), trayMat);
+          accGroup.add(tray);
+
+          const vaseMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.3 });
+          const vase = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, dims[1] * 0.65, 16), vaseMat);
+          vase.position.y = dims[1] * 0.35;
+          accGroup.add(vase);
+
+          const budMat = new THREE.MeshStandardMaterial({ color: 0x486038, roughness: 0.7 });
+          const bud = new THREE.Mesh(new THREE.DodecahedronGeometry(0.07, 1), budMat);
+          bud.position.y = dims[1] * 0.72;
+          accGroup.add(bud);
+
+          roomShellGroup.add(accGroup);
+
+        } else if (cat === 'rug') {
+          // Woven Area Rug Plane
+          const rugMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.92 });
+          const rug = new THREE.Mesh(new THREE.BoxGeometry(dims[0], dims[1], dims[2]), rugMat);
+          rug.position.set(pos[0], pos[1], pos[2]);
+          roomShellGroup.add(rug);
+
+        } else if (cat === 'door') {
+          // Architectural Portal (Heavy Architrave Frame + Recessed Panel)
+          const doorGroup = new THREE.Group();
+          doorGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const frameMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(obj.frame_color || '#1f1b18'), roughness: 0.4 });
+          const architrave = new THREE.Mesh(new THREE.BoxGeometry(dims[0] + 0.15, dims[1] + 0.1, dims[2] + 0.08), frameMat);
+          doorGroup.add(architrave);
+
+          const panelMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.55 });
+          const panel = new THREE.Mesh(new THREE.BoxGeometry(dims[0], dims[1], dims[2]), panelMat);
+          doorGroup.add(panel);
+
+          // Brass Door Handle
+          const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.15, 12), new THREE.MeshStandardMaterial({ color: 0xc8a462, metalness: 0.9, roughness: 0.2 }));
+          handle.rotation.z = Math.PI / 2;
+          handle.position.set(-dims[0] * 0.4, 0, dims[2] * 0.6);
+          doorGroup.add(handle);
+          roomShellGroup.add(doorGroup);
+
+        } else if (cat === 'plant') {
+          // Architectural Potted Plant (Ceramic Pot + Soil Bed + Multi-Tiered Foliage)
+          const plantGroup = new THREE.Group();
+          plantGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const potH = dims[1] * 0.42;
+          const potR = dims[0] * 0.48;
+          const potMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(obj.pot_color || '#2c221a'), roughness: 0.6 });
+          const pot = new THREE.Mesh(new THREE.CylinderGeometry(potR, potR * 0.75, potH, 16), potMat);
+          pot.position.y = -dims[1] * 0.28;
+          plantGroup.add(pot);
+
+          const soil = new THREE.Mesh(new THREE.CylinderGeometry(potR * 0.92, potR * 0.92, 0.04, 16), new THREE.MeshStandardMaterial({ color: 0x14100c, roughness: 0.95 }));
+          soil.position.y = -dims[1] * 0.08;
+          plantGroup.add(soil);
+
+          const leafMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.65 });
+          const leafClusters = [
+            { x: 0, y: dims[1] * 0.12, z: 0, s: dims[0] * 0.52 },
+            { x: -dims[0] * 0.18, y: dims[1] * 0.24, z: dims[0] * 0.14, s: dims[0] * 0.38 },
+            { x: dims[0] * 0.18, y: dims[1] * 0.28, z: -dims[0] * 0.14, s: dims[0] * 0.42 },
+            { x: 0, y: dims[1] * 0.38, z: 0, s: dims[0] * 0.32 }
+          ];
+          leafClusters.forEach(c => {
+            const foliage = new THREE.Mesh(new THREE.DodecahedronGeometry(c.s, 1), leafMat);
+            foliage.position.set(c.x, c.y, c.z);
+            foliage.rotation.set(Math.random(), Math.random(), Math.random());
+            plantGroup.add(foliage);
+          });
+          roomShellGroup.add(plantGroup);
+
+        } else if (cat === 'bed') {
+          // Master Bed (Platform + Mattress + Headboard + Twin Nightstands)
+          const bedGroup = new THREE.Group();
+          bedGroup.position.set(pos[0], pos[1], pos[2]);
+
+          const woodMat = new THREE.MeshStandardMaterial({ color: 0x2a221b, roughness: 0.45 });
+          const base = new THREE.Mesh(new THREE.BoxGeometry(dims[0], 0.25, dims[2]), woodMat);
+          base.position.y = -dims[1] * 0.35;
+          bedGroup.add(base);
+
+          const linenMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.85 });
+          const mattress = new THREE.Mesh(new THREE.BoxGeometry(dims[0] * 0.95, 0.40, dims[2] * 0.92), linenMat);
+          mattress.position.y = -dims[1] * 0.05;
+          bedGroup.add(mattress);
+
+          const headboard = new THREE.Mesh(new THREE.BoxGeometry(dims[0] * 1.05, dims[1] * 0.85, 0.18), woodMat);
+          headboard.position.set(0, dims[1] * 0.35, -dims[2] * 0.48);
+          bedGroup.add(headboard);
+
+          roomShellGroup.add(bedGroup);
+
+        } else if (cat === 'nightstand') {
+          // Bedside Nightstand + Table Lamp
+          const nsGroup = new THREE.Group();
+          nsGroup.position.set(pos[0], pos[1], pos[2]);
+          const woodMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.5 });
+          const nsBox = new THREE.Mesh(new THREE.BoxGeometry(dims[0], dims[1], dims[2]), woodMat);
+          nsGroup.add(nsBox);
+          const lampBase = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 0.22, 12), new THREE.MeshStandardMaterial({ color: 0xc8a462, metalness: 0.85 }));
+          lampBase.position.y = dims[1] * 0.5 + 0.11;
+          nsGroup.add(lampBase);
+          const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.16, 0.18, 16), new THREE.MeshStandardMaterial({ color: 0xfffaea, roughness: 0.3 }));
+          shade.position.y = dims[1] * 0.5 + 0.28;
+          nsGroup.add(shade);
+          roomShellGroup.add(nsGroup);
+
+        } else if (cat === 'wardrobe') {
+          // Minimalist Built-in Wardrobe along Wall
+          const wdGroup = new THREE.Group();
+          wdGroup.position.set(pos[0], pos[1], pos[2]);
+          const wdMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.65 });
+          const wdBox = new THREE.Mesh(new THREE.BoxGeometry(dims[0], dims[1], dims[2]), wdMat);
+          wdGroup.add(wdBox);
+          roomShellGroup.add(wdGroup);
+
+        } else if (cat === 'desk' || cat === 'table') {
+          // Designer Workspace Desk / Table
+          const tableGroup = new THREE.Group();
+          tableGroup.position.set(pos[0], pos[1], pos[2]);
+          const topMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.35, metalness: 0.1 });
+          const top = new THREE.Mesh(new THREE.BoxGeometry(dims[0], 0.08, dims[2]), topMat);
+          top.position.y = dims[1] * 0.45;
+          tableGroup.add(top);
+          const legMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.8, roughness: 0.3 });
+          const legGeom = new THREE.CylinderGeometry(0.035, 0.025, dims[1] * 0.9, 12);
+          const ox = dims[0] * 0.44;
+          const oz = dims[2] * 0.42;
+          [[-ox, -oz], [ox, -oz], [-ox, oz], [ox, oz]].forEach(lp => {
+            const leg = new THREE.Mesh(legGeom, legMat);
+            leg.position.set(lp[0], 0, lp[1]);
+            tableGroup.add(leg);
+          });
+          roomShellGroup.add(tableGroup);
+
+        } else if (cat === 'chair') {
+          // Ergonomic Chair
+          const chairGroup = new THREE.Group();
+          chairGroup.position.set(pos[0], pos[1], pos[2]);
+          const seatMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.6 });
+          const seat = new THREE.Mesh(new THREE.BoxGeometry(dims[0], 0.10, dims[2]), seatMat);
+          seat.position.y = -dims[1] * 0.15;
+          chairGroup.add(seat);
+          const back = new THREE.Mesh(new THREE.BoxGeometry(dims[0] * 0.9, dims[1] * 0.55, 0.12), seatMat);
+          back.position.set(0, dims[1] * 0.18, -dims[2] * 0.38);
+          chairGroup.add(back);
+          const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, dims[1] * 0.35, 12), new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.9 }));
+          pole.position.y = -dims[1] * 0.35;
+          chairGroup.add(pole);
+          roomShellGroup.add(chairGroup);
+
+        } else if (cat === 'bookshelf') {
+          // Architectural Bookshelf
+          const bsGroup = new THREE.Group();
+          bsGroup.position.set(pos[0], pos[1], pos[2]);
+          const woodMat = new THREE.MeshStandardMaterial({ color: objColor, roughness: 0.55 });
+          const frame = new THREE.Mesh(new THREE.BoxGeometry(dims[0], dims[1], dims[2]), woodMat);
+          bsGroup.add(frame);
+          for (let s = -dims[1] * 0.35; s <= dims[1] * 0.35; s += dims[1] * 0.25) {
+            const shelf = new THREE.Mesh(new THREE.BoxGeometry(dims[0] * 0.95, 0.04, dims[2] * 0.95), woodMat);
+            shelf.position.y = s;
+            bsGroup.add(shelf);
+          }
+          roomShellGroup.add(bsGroup);
+
+        } else if (cat === 'pendant_light') {
+          // Pendant Light Fixture
+          const pGroup = new THREE.Group();
+          pGroup.position.set(pos[0], pos[1], pos[2]);
+          const brassMat = new THREE.MeshStandardMaterial({ color: 0xc8a462, metalness: 0.9, roughness: 0.2 });
+          const wire = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.55, 8), brassMat);
+          wire.position.y = 0.28;
+          pGroup.add(wire);
+          const shade = new THREE.Mesh(new THREE.ConeGeometry(0.25, 0.28, 16), brassMat);
+          shade.rotation.x = Math.PI;
+          shade.position.y = 0;
+          pGroup.add(shade);
+          roomShellGroup.add(pGroup);
+        }
+      });
+
+      // Show roomShellGroup for Mode 2 (walkthrough) and Mode 3 (orbit)
+      roomShellGroup.visible = (AppState.active3DMode === 2 || AppState.active3DMode === 3);
+      spatialScene.add(roomShellGroup);
+    }
+
+    function switch3DViewingExperience(modeNum) {
+      AppState.active3DMode = modeNum;
+      document.querySelectorAll('.spatial-mode-pill').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`tab-3d-mode-${modeNum}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const container = document.getElementById('three-spatial-canvas-container');
+      if (container && spatialCamera && spatialRenderer) {
+        const cw = container.clientWidth || 1100;
+        const ch = container.clientHeight || 600;
+        spatialCamera.aspect = cw / ch;
+        spatialCamera.updateProjectionMatrix();
+        spatialRenderer.setSize(cw, ch);
+      }
+
+      if (depthPlaneMesh) depthPlaneMesh.visible = (modeNum === 1);
+      if (roomShellGroup) roomShellGroup.visible = (modeNum === 2 || modeNum === 3);
+
+      const subtext = document.getElementById('spatial-mode-subtext');
+      const hudChipMode = document.getElementById('hud-chip-mode');
+      const hudDisclaimer = document.getElementById('hud-chip-disclaimer');
+
+      if (modeNum === 1) {
+        subtext.innerHTML = 'Mode 1 &bull; <strong>Cinematic Depth View</strong> (Subtle mouse parallax &amp; ambient studio lighting)';
+        hudChipMode.innerText = 'Mode 1: Cinematic Depth View';
+        hudDisclaimer.innerText = 'AI Depth-Based Spatial Preview. Visualizes relative depth and architectural perspective parallax.';
+        setCameraViewPreset('default');
+      } else if (modeNum === 2) {
+        subtext.innerHTML = 'Mode 2 &bull; <strong>Spatial Walkthrough</strong> (Eye-level navigation with WASD, Arrow keys, or touch D-Pad)';
+        hudChipMode.innerText = 'Mode 2: Spatial Walkthrough';
+        hudDisclaimer.innerText = 'First-person interior perspective. Constrained boundaries ensure safe, void-free movement.';
+        setCameraViewPreset('walkthrough');
+      } else if (modeNum === 3) {
+        subtext.innerHTML = 'Mode 3 &bull; <strong>Architectural Orbit</strong> (Full room shell, detected objects, windows, and free turntable orbit)';
+        hudChipMode.innerText = 'Mode 3: Architectural Orbit';
+        hudDisclaimer.innerText = 'Procedural architectural reconstruction with verified furniture, plants, openings, and ceiling fan.';
+        setCameraViewPreset('orbit');
+      }
+    }
+
+    function setCameraViewPreset(preset) {
+      document.querySelectorAll('.btn-camera-preset').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`cam-preset-${preset}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (!spatialCamera) return;
+
+      if (preset === 'default') {
+        spatialCamera.position.set(0, 0, 3.8);
+        cameraYaw = 0; cameraPitch = 0;
+        cameraLookTarget.set(0, 0, -1);
+        spatialCamera.rotation.set(0, 0, 0);
+      } else if (preset === 'walkthrough') {
+        spatialCamera.position.set(0, 0.05, 1.8);
+        cameraYaw = 0; cameraPitch = 0;
+        cameraLookTarget.set(0, 0, -1.5);
+        spatialCamera.rotation.set(0, 0, 0);
+      } else if (preset === 'orbit') {
+        orbitDistance = 5.2;
+        cameraYaw = 0.65; cameraPitch = 0.35;
+        cameraLookTarget.set(0, -0.2, -1.0);
+        updateOrbitCameraPosition();
+      } else if (preset === 'front') {
+        orbitDistance = 5.5;
+        cameraYaw = 0; cameraPitch = 0.08;
+        cameraLookTarget.set(0, -0.2, -1.0);
+        updateOrbitCameraPosition();
+      } else if (preset === 'side') {
+        orbitDistance = 5.8;
+        cameraYaw = Math.PI / 2; cameraPitch = 0.08;
+        cameraLookTarget.set(0, -0.2, -1.0);
+        updateOrbitCameraPosition();
+      } else if (preset === 'top') {
+        spatialCamera.position.set(0, 7.0, -0.5);
+        cameraLookTarget.set(0, -1.8, -0.5);
+        spatialCamera.lookAt(cameraLookTarget);
+        if (ceilingMesh) ceilingMesh.visible = false;
+      }
+
+      if (preset !== 'top' && ceilingMesh) {
+        ceilingMesh.visible = !isCeilingCutaway;
+      }
+    }
+
+    function reset3DCameraPosition() {
+      if (AppState.active3DMode === 2) {
+        setCameraViewPreset('walkthrough');
+      } else if (AppState.active3DMode === 3) {
+        setCameraViewPreset('orbit');
+      } else {
+        setCameraViewPreset('default');
+      }
+      showToast('Camera position reset');
+    }
+
+    function startKeyMove(key) { AppState.cameraKeyMove[key] = true; }
+    function stopKeyMove(key) { AppState.cameraKeyMove[key] = false; }
+
+    function animateSpatialScene() {
+      requestAnimationFrame(animateSpatialScene);
+      if (!spatialCamera || !spatialRenderer) return;
+
+      // Rotate ceiling fan blades smoothly
+      if (animatedFanBlades) {
+        animatedFanBlades.rotation.y += 0.045;
+      }
+
+      // Auto-Orbit turntable rotation in Mode 3
+      if (isAutoOrbiting && AppState.active3DMode === 3) {
+        cameraYaw += 0.004;
+        updateOrbitCameraPosition();
+      }
+
+      // Mode 2 WASD / Arrow / D-Pad Movement
+      if (AppState.active3DMode === 2) {
+        const speed = 0.048;
+        if (AppState.cameraKeyMove.w) spatialCamera.translateZ(-speed);
+        if (AppState.cameraKeyMove.s) spatialCamera.translateZ(speed);
+        if (AppState.cameraKeyMove.a) spatialCamera.translateX(-speed);
+        if (AppState.cameraKeyMove.d) spatialCamera.translateX(speed);
+
+        // Constrained movement boundaries prevent wall clipping & black void leaks
+        clampWalkthroughCamera();
+      }
+
+      spatialRenderer.render(spatialScene, spatialCamera);
+    }
+
+    function scrollToSpatial3DExperience(immediate = false) {
+      const section = document.getElementById('section-spatial-3d-experience');
+      if (section) {
+        section.scrollIntoView({ block: 'start', behavior: immediate ? 'instant' : 'smooth' });
+      }
+    }
+
+    /* ==========================================================================
+       MY DESIGNS ARCHITECTURAL PORTFOLIO
+       ========================================================================== */
+    function loadSavedDesignsFromStorage() {
+      try {
+        const data = localStorage.getItem('sketchspace_saved_designs');
+        if (data) {
+          AppState.savedDesigns = JSON.parse(data);
+        } else {
+          AppState.savedDesigns = [
+            {
+              id: 'design_1',
+              title: 'Minimalist Travertine Salon',
+              category: 'living_room',
+              renderUrl: '/api/image/local_cn_living_room_1795536539194.png',
+              sketchUrl: '/api/sketches/example/new_living_room_sketch.png',
+              depthUrl: '/api/depth/local_cn_living_room_1795536539194.png',
+              date: 'November 2026',
+              notes: 'Natural daylight, travertine slab flooring, warm linen upholstery'
+            },
+            {
+              id: 'design_2',
+              title: 'Master Bedroom Sanctuary',
+              category: 'bedroom',
+              renderUrl: '/api/image/local_cn_bedroom_1795531503385.png',
+              sketchUrl: '/api/sketches/example/new_bedroom_sketch.png',
+              depthUrl: '/api/depth/local_cn_bedroom_1795531503385.png',
+              date: 'November 2026',
+              notes: 'White oak accents, wool throws, floor-to-ceiling windows'
+            },
+            {
+              id: 'design_3',
+              title: 'Calacatta Gold Spa Bathroom',
+              category: 'bathroom',
+              renderUrl: '/api/image/local_cn_bathroom_1795532521076.png',
+              sketchUrl: '/api/sketches/example/new_bathroom_sketch.png',
+              depthUrl: '/api/depth/local_cn_bathroom_1795532521076.png',
+              date: 'November 2026',
+              notes: 'Freestanding stone tub, brushed brass fixtures'
+            }
+          ];
+          saveDesignsToStorage();
+        }
+      } catch (e) {
+        console.error('Failed to load designs:', e);
+      }
+    }
+
+    function saveDesignsToStorage() {
+      try {
+        localStorage.setItem('sketchspace_saved_designs', JSON.stringify(AppState.savedDesigns));
+      } catch (e) {
+        console.error('Storage error:', e);
+      }
+    }
+
+    function renderSavedDesignsGallery(filterCategory = 'all', searchQuery = '') {
+      const container = document.getElementById('saved-designs-grid-container');
+      const emptyState = document.getElementById('portfolio-empty-state');
+      if (!container) return;
+
+      container.innerHTML = '';
+      let list = AppState.savedDesigns || [];
+
+      if (filterCategory && filterCategory !== 'all') {
+        list = list.filter(d => d.category === filterCategory);
+      }
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        list = list.filter(d => d.title.toLowerCase().includes(q) || (d.notes && d.notes.toLowerCase().includes(q)));
+      }
+
+      if (list.length === 0) {
+        emptyState.style.display = 'flex';
+        return;
+      }
+      emptyState.style.display = 'none';
+
+      list.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'saved-design-card';
+        card.innerHTML = `
+          <div class="card-thumbnail-stage">
+            <img src="${item.renderUrl}" alt="${item.title}" onerror="this.src='/api/sketches/example/new_living_room_sketch.png'">
+            <img class="card-sketch-hover-preview" src="${item.sketchUrl}" alt="Original Sketch">
+          </div>
+          <div class="card-body">
+            <div class="card-title-row">
+              <h4 class="card-project-title">${item.title}</h4>
+              <span class="card-room-badge">${item.category.replace('_', ' ')}</span>
+            </div>
+            <div class="card-date-meta">${item.date || 'Saved Space'}</div>
+            <div class="card-actions-row">
+              <button class="btn-card-action" onclick="reopenDesignInStudio('${item.id}')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                <span>Edit in Studio</span>
+              </button>
+              <button class="btn-card-action" onclick="exploreSavedDesignIn3D('${item.id}')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                <span>3D</span>
+              </button>
+              <button class="btn-card-delete" title="Delete Design" onclick="deleteSavedDesign('${item.id}')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function setPortfolioCategoryFilter(cat, btn) {
+      document.querySelectorAll('.portfolio-chip').forEach(c => c.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      const search = document.getElementById('portfolio-search-input').value;
+      renderSavedDesignsGallery(cat, search);
+    }
+
+    function filterSavedDesignsGallery() {
+      const search = document.getElementById('portfolio-search-input').value;
+      const activeChip = document.querySelector('.portfolio-chip.active');
+      const cat = activeChip ? activeChip.innerText.toLowerCase().replace(' ', '_') : 'all';
+      renderSavedDesignsGallery(cat === 'all_spaces' ? 'all' : cat, search);
+    }
+
+    function reopenDesignInStudio(id) {
+      const design = AppState.savedDesigns.find(d => d.id === id);
+      if (!design) return;
+      switchAppDestination('studio');
+      AppState.currentGeneratedUrl = design.renderUrl;
+      AppState.currentSketchUrl = design.sketchUrl;
+      AppState.currentDepthUrl = design.depthUrl || design.renderUrl;
+      displaySynthesizedResult();
+
+      const img = new Image();
+      img.onload = () => {
+        ctx.fillStyle = '#fbf9f5';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        saveCanvasState();
+      };
+      img.src = design.sketchUrl;
+      showToast(`Reopened "${design.title}" in Studio`);
+    }
+
+    function exploreSavedDesignIn3D(id) {
+      const design = AppState.savedDesigns.find(d => d.id === id);
+      if (!design) return;
+      switchAppDestination('studio');
+      AppState.currentGeneratedUrl = design.renderUrl;
+      AppState.currentSketchUrl = design.sketchUrl;
+      AppState.currentDepthUrl = design.depthUrl || design.renderUrl;
+      AppState.currentGenerationId = design.id || `gen_saved_${Date.now()}`;
+      AppState.activeCategory = design.category || 'living_room';
+      displaySynthesizedResult();
+      initOrUpdateRebuilt3DScene(design.renderUrl, design.depthUrl || design.renderUrl, AppState.currentGenerationId, AppState.activeCategory);
+      scrollToSpatial3DExperience();
+    }
+
+    function deleteSavedDesign(id) {
+      if (!confirm('Are you sure you want to delete this saved design?')) return;
+      AppState.savedDesigns = AppState.savedDesigns.filter(d => d.id !== id);
+      saveDesignsToStorage();
+      renderSavedDesignsGallery();
+      showToast('Design deleted from portfolio');
+    }
+
+    function openSaveDesignModal() {
+      document.getElementById('save-design-modal').classList.add('active');
+    }
+    function closeSaveDesignModal() {
+      document.getElementById('save-design-modal').classList.remove('active');
+    }
+
+    function confirmSaveCurrentDesign() {
+      const title = document.getElementById('save-design-title').value.trim() || 'Untitled Spatial Design';
+      const notes = document.getElementById('save-design-notes').value.trim();
+
+      const newDesign = {
+        id: `design_${Date.now()}`,
+        title: title,
+        category: AppState.activeCategory,
+        renderUrl: AppState.currentGeneratedUrl,
+        sketchUrl: canvas.toDataURL('image/png'),
+        depthUrl: AppState.currentDepthUrl,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+        notes: notes
+      };
+
+      AppState.savedDesigns.unshift(newDesign);
+      saveDesignsToStorage();
+      closeSaveDesignModal();
+      showToast(`Saved "${title}" to My Designs`);
+    }
+
+    /* Presentation Mode Curtain */
+    function openFullscreenPresentation() {
+      document.getElementById('pres-sketch-img').src = AppState.currentSketchUrl;
+      document.getElementById('pres-render-img').src = AppState.currentGeneratedUrl;
+      document.getElementById('fullscreen-presentation-curtain').classList.add('active');
+    }
+    function closeFullscreenPresentation() {
+      document.getElementById('fullscreen-presentation-curtain').classList.remove('active');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('spatial-toast');
+      document.getElementById('toast-message-text').innerText = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 3200);
+    }
+
+    /* DOM Ready */
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize mouse-reactive golden particles
+      new GoldenDustParticleEngine();
+
+      // 2. Initialize Three.js interactive 3D dollhouse in Hero
+      initHeroThreeDollhouse();
+
+      // 3. Load saved portfolio designs
+      loadSavedDesignsFromStorage();
+
+      // 4. Set initial destination from URL hash or default to overview
+      const hash = window.location.hash.replace('#', '') || 'overview';
+      switchAppDestination(hash);
+
+      // 5. Pre-warm canvas
+      initDrawingCanvasIfNeeded();
+
+      // 6. Preload Three.js 3D Walkthrough with verified fixture
+      initOrUpdateRebuilt3DScene(AppState.currentGeneratedUrl, AppState.currentDepthUrl, AppState.currentGenerationId, AppState.activeCategory);
+
+      // 7. Check URL search parameters for direct deep-linking / QA verification
+      const urlParams = new URLSearchParams(window.location.search);
+      const m3d = urlParams.get('mode3d');
+      const camPreset = urlParams.get('cam');
+      const genImg = urlParams.get('gen_img');
+      const genCat = urlParams.get('cat');
+      const genId = urlParams.get('gen_id');
+
+      if (genImg) {
+        AppState.currentGeneratedUrl = `/api/image/${genImg}`;
+        AppState.currentDepthUrl = `/api/depth/${genImg}`;
+        if (genCat) AppState.activeCategory = genCat;
+        AppState.currentGenerationId = genId || `gen_${genImg.split('.')[0]}`;
+        initOrUpdateRebuilt3DScene(AppState.currentGeneratedUrl, AppState.currentDepthUrl, AppState.currentGenerationId, AppState.activeCategory);
+      }
+
+      if (m3d) {
+        switchAppDestination('studio');
+        const sec3d = document.getElementById('section-spatial-3d-experience');
+        const studioView = document.getElementById('view-studio');
+        if (sec3d && studioView && urlParams.get('focus3d')) {
+          studioView.prepend(sec3d);
+        }
+        switch3DViewingExperience(parseInt(m3d));
+        if (camPreset) setCameraViewPreset(camPreset);
+        if (urlParams.get('inspect')) toggleTechnicalInspector();
+        scrollToSpatial3DExperience(true);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+venv_diffusion/
+env/
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.json
+
+# AI model weights and caches
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.onnx
+models/
+checkpoints/
+huggingface/
+.cache/
+
+# Datasets
+datasets/
+data/
+*.zip
+
+# Generated outputs
+outputs/
+generated/
+temp/
+*.log
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
